@@ -5,7 +5,7 @@ const SCENES = [
     { id: 'loveisall', name: 'Love' }, { id: 'winter-daffodil', name: 'Winter' },
     { id: 'goldenglow', name: 'Glow' }, { id: 'midnight', name: 'Sparkle' },
     { id: 'my-little', name: 'Little' }, { id: 'magic', name: 'Magic' },
-    { id: 'snowman', name: 'Snow' }, { id: 'cat-vibe', name: 'Cat' },
+    { id: 'snowman', name: 'Snowman' }, { id: 'cat-vibe', name: 'The Cat' },
     { id: 'flowers', name: 'Floral' }, { id: 'stars', name: 'Stars' },
     { id: 'ocean', name: 'Ocean' }, { id: 'forest', name: 'Forest' }
 ];
@@ -31,7 +31,7 @@ function GiftBoxTile({ word }: { word: string }) {
     };
 
     return (
-        <span onClick={() => { if(!isOpen) playPop(); setIsOpen(!isOpen); }} style={{ cursor: 'pointer', display: 'inline-block', margin: '0 8px', verticalAlign: 'middle' }}>
+        <span onClick={(e) => { e.stopPropagation(); if(!isOpen) playPop(); setIsOpen(!isOpen); }} style={{ cursor: 'pointer', display: 'inline-block', margin: '0 8px', verticalAlign: 'middle' }}>
             {isOpen ? (
                 <span style={{ fontSize: '2.2rem', color: '#8b4513', fontWeight: 'bold', borderBottom: '6px solid #ffd700' }}>{word}</span>
             ) : (
@@ -159,7 +159,7 @@ const styles = {
     whiteGridContainer: { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.85)', padding: '12px', borderRadius: '25px', backdropFilter: 'blur(10px)', border: '1px solid white', zIndex: 20 } as React.CSSProperties,
     gridHeader: { color: '#ff4500', fontSize: '0.6rem', marginBottom: '8px', textAlign: 'center' as const },
     videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' },
-    gridItem: { width: '55px', height: '55px', borderRadius: '12px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold' } as React.CSSProperties,
+    gridItem: { width: '55px', height: '55px', borderRadius: '12px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' as const } as React.CSSProperties,
     card: { background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '35px', width: '90%', maxWidth: '500px', textAlign: 'center' as const, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' } as React.CSSProperties,
     cardTitle: { fontSize: '1.5rem', margin: '0 0 10px 0', color: '#333' },
     tapPrompt: { fontSize: '0.9rem', color: '#ff8c00', fontWeight: 'bold', marginBottom: '15px' },
@@ -168,7 +168,14 @@ const styles = {
     normalWord: { cursor: 'pointer', padding: '2px 5px' },
     selectedWord: { cursor: 'pointer', background: '#ffd700', borderRadius: '8px', padding: '4px 8px', fontWeight: 'bold' },
     input: { width: '100%', height: '70px', padding: '12px', borderRadius: '15px', border: '1px solid #ddd', marginBottom: '10px' },
-    previewBtn: { flex: 1, padding: '15px', borderRadius: '40px', border: '1px solid #ddd', background: '#eee', fontWeight: 'bold', cursor: 'pointer' },
-    sendBtn: { flex: 2, padding: '15px', borderRadius: '40px', border: 'none', color: 'white', fontWeight: 'bold', background: 'linear-gradient(45deg, #ff4500, #ff8c00)', cursor: 'pointer' },
+    previewBtn: { flex: 1, padding: '15px', borderRadius: '40px', border: '1px solid #ddd', background: '#eee', fontWeight: 'bold', cursor: 'pointer' } as React.CSSProperties,
+    sendBtn: { flex: 2, padding: '15px', borderRadius: '40px', border: 'none', color: 'white', fontWeight: 'bold', background: 'linear-gradient(45deg, #ff4500, #ff8c00)', cursor: 'pointer' } as React.CSSProperties,
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)', position: 'relative', zIndex: 100 } as React.CSSProperties,
-    previewLabel: { position: 'absolute', top: '30px', background: 'rgba(255, 69, 0, 0.9)', color: 'white', padding: '8px 20px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold', zIndex: 110, boxShadow: '0 4px 15
+    previewLabel: { position: 'absolute', top: '30px', background: 'rgba(255, 69, 0, 0.9)', color: 'white', padding: '8px 20px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold', zIndex: 110, boxShadow: '0 4px 15px rgba(0,0,0,0.3)', animation: 'pulse 2s infinite' } as React.CSSProperties,
+    vibeCard: { background: 'rgba(255,255,255,0.9)', padding: '50px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '700px', textAlign: 'center' as const } as React.CSSProperties,
+    vibeHeader: { color: '#ff4500', fontSize: '2.2rem', marginBottom: '30px', fontWeight: 'bold' },
+    messageArea: { fontSize: '2rem', color: '#333', lineHeight: '2.5' },
+    backBtn: { background: '#666', color: 'white', padding: '12px 30px', borderRadius: '50px', border: 'none', marginTop: '40px', cursor: 'pointer', fontWeight: 'bold' } as React.CSSProperties,
+    historyBox: { marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '15px' },
+    historyItem: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: '#f9f9f9', borderRadius: '10px', marginBottom: '5px', cursor: 'pointer', fontSize: '0.8rem', color: '#666' }
+};
