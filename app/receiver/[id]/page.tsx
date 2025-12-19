@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
+// Her exact alphabetMap for consistency
 const alphabetMap: { [key: string]: string } = {
     'A': 'https://storage.googleapis.com/simple-bucket-27/A.png',
     'B': 'https://storage.googleapis.com/simple-bucket-27/B.png',
@@ -62,16 +63,15 @@ function GiftBoxTile({ word }: { word: string }) {
 
 function ReceiverContent({ id }: { id: string }) {
     const searchParams = useSearchParams();
-    const msg = searchParams.get('msg') || "";
-    const tilesStr = searchParams.get('tiles') || "";
+    // Getting data from the URL the same way her success page does
+    const msg = decodeURIComponent(searchParams.get('msg') || "");
+    const tilesStr = decodeURIComponent(searchParams.get('tiles') || "");
     const selectedTiles = tilesStr.split(',');
 
-    const message = decodeURIComponent(id); 
-    const tokens = message.split(/(\s+)/);
+    const tokens = msg.split(/(\s+)/);
 
     return (
         <main style={styles.container}>
-            {/* Standard background logic - can be upgraded to specific scenes */}
             <video autoPlay loop muted style={styles.video}>
                 <source src="https://storage.googleapis.com/simple-bucket-27/loveisall.mp4" type="video/mp4" />
             </video>
@@ -92,7 +92,6 @@ function ReceiverContent({ id }: { id: string }) {
             </div>
             <style jsx global>{`
                 @keyframes wobble { 0% { transform: rotate(0deg); } 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } 100% { transform: rotate(0deg); } }
-                .wobble { cursor: pointer; }
                 .wobble:hover { animation: wobble 0.3s ease-in-out infinite; }
             `}</style>
         </main>
@@ -101,19 +100,19 @@ function ReceiverContent({ id }: { id: string }) {
 
 export default function Page({ params }: { params: { id: string } }) {
     return (
-        <Suspense fallback={<div>Opening your vibe...</div>}>
+        <Suspense fallback={<div>Loading your vibe...</div>}>
             <ReceiverContent id={params.id} />
         </Suspense>
     );
 }
 
-// RESTORING HER SPECIFIC "MAGIC" STYLES
+// Her exact styles to bring the flair back
 const styles: { [key: string]: React.CSSProperties } = {
     container: { height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
     video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 },
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.2)' },
     fullPreviewCard: { background: 'rgba(255,255,255,0.95)', padding: '40px', borderRadius: '35px', width: '92%', maxWidth: '650px', textAlign: 'center', border: '6px solid #ffd700', minHeight: '400px' },
-    giftWrapper: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: '0 10px', verticalAlign: 'middle' },
+    giftWrapper: { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', margin: '0 10px', verticalAlign: 'middle', cursor: 'pointer' },
     boxContainer: { position: 'relative', width: '115px', height: '80px', display: 'flex', flexDirection: 'column', alignItems: 'center' },
     bowKnot: { position: 'absolute', top: '-6px', width: '16px', height: '16px', background: 'white', borderRadius: '50%', zIndex: 3 },
     bowLoopLeft: { position: 'absolute', top: '-15px', left: '26px', width: '32px', height: '26px', border: '3px solid white', borderRadius: '50% 50% 0 50%', transform: 'rotate(-20deg)', zIndex: 2 },
