@@ -45,7 +45,7 @@ export default function SenderPage() {
                 const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
                 await stripe?.redirectToCheckout({ sessionId: data.id });
             }
-        } catch (err) { console.error("Payment failed", err); }
+        } catch (err) { console.error("Payment Error", err); }
     };
 
     const toggleTile = (word: string) => {
@@ -56,16 +56,13 @@ export default function SenderPage() {
 
     return (
         <main style={styles.container}>
-            {/* UNMUTED VIDEO - CONTAIN SCALE */}
+            {/* UNMUTED VIDEO - COVER SCALE TO HIDE LOGOS */}
             <video key={selectedScene.id} autoPlay loop playsInline style={styles.video}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* UI ANCHORED TOP-LEFT TO COVER LOGOS */}
+            {/* TOP LEFT UI - EYE UNDER GRID TO MASK LOGO */}
             <div style={styles.topLeftControls}>
-                <button onClick={() => setIsPreview(!isPreview)} style={styles.eyeBtn}>
-                    {isPreview ? '📖' : '👁️'}
-                </button>
                 <div style={styles.gridContainer}>
                     <div style={styles.videoGrid}>
                         {SCENES.map((scene) => (
@@ -79,6 +76,9 @@ export default function SenderPage() {
                         ))}
                     </div>
                 </div>
+                <button onClick={() => setIsPreview(!isPreview)} style={styles.eyeBtn}>
+                    {isPreview ? '📖' : '👁️'}
+                </button>
             </div>
 
             <div style={styles.overlay}>
@@ -128,21 +128,21 @@ export default function SenderPage() {
 
 const styles: { [key: string]: React.CSSProperties } = {
     container: { height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' },
-    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'contain', zIndex: 0 },
-    topLeftControls: { position: 'absolute', top: '15px', left: '15px', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '15px' },
-    eyeBtn: { width: '55px', height: '55px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', border: '2px solid gold', fontSize: '1.6rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 15px rgba(0,0,0,0.4)' },
-    gridContainer: { background: 'rgba(0,0,0,0.8)', padding: '12px', borderRadius: '20px', border: '1px solid rgba(255,215,0,0.4)', backdropFilter: 'blur(10px)' },
-    videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' },
-    gridItem: { width: '50px', height: '50px', color: 'white', borderRadius: '10px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold' },
+    video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 },
+    topLeftControls: { position: 'absolute', top: '10px', left: '10px', zIndex: 100, display: 'flex', flexDirection: 'column', gap: '10px' },
+    eyeBtn: { width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(255,255,255,0.95)', border: '2px solid gold', fontSize: '1.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '5px' },
+    gridContainer: { background: 'rgba(0,0,0,0.85)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255,215,0,0.4)', backdropFilter: 'blur(10px)' },
+    videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '5px' },
+    gridItem: { width: '45px', height: '45px', color: 'white', borderRadius: '8px', cursor: 'pointer', fontSize: '0.5rem', fontWeight: 'bold' },
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
-    editorCard: { background: 'rgba(255,255,255,0.95)', padding: '35px', borderRadius: '40px', width: '90%', maxWidth: '550px', textAlign: 'center' },
+    editorCard: { background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '40px', width: '90%', maxWidth: '520px', textAlign: 'center' },
     inputArea: { minHeight: '80px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', marginBottom: '15px', textAlign: 'left' },
-    token: { cursor: 'pointer', padding: '2px 5px', borderRadius: '5px', margin: '0 2px' },
-    hiddenInput: { width: '100%', height: '60px', padding: '12px', borderRadius: '12px', border: '1px solid #eee', marginBottom: '20px' },
+    token: { cursor: 'pointer', padding: '2px 4px', borderRadius: '4px', margin: '0 1px' },
+    hiddenInput: { width: '100%', height: '50px', padding: '10px', borderRadius: '12px', border: '1px solid #eee', marginBottom: '15px' },
     sendBtn: { background: '#ff6600', color: 'white', padding: '15px 45px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', fontWeight: 'bold', cursor: 'pointer' },
-    vibeCard: { background: 'rgba(255,255,255,0.85)', padding: '45px', borderRadius: '45px', border: '8px solid #ffd700', width: '85%', maxWidth: '780px', textAlign: 'center' },
+    vibeCard: { background: 'rgba(255,255,255,0.85)', padding: '40px', borderRadius: '40px', border: '8px solid #ffd700', width: '85%', maxWidth: '780px', textAlign: 'center' },
     vibeHeader: { color: '#ff4500', marginBottom: '25px' },
     messageArea: { fontSize: '2.1rem', color: '#333', lineHeight: '2.8' },
     alphabetBox: { width: '100px', height: 'auto', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.4))' },
-    backBtn: { marginTop: '25px', background: '#444', color: '#fff', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer' }
+    backBtn: { marginTop: '20px', background: '#444', color: '#fff', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer' }
 };
