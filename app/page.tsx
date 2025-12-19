@@ -18,6 +18,12 @@ export default function VibeGreetingCreator() {
 
     const tokens = message.split(/(\s+)/);
 
+    const handleSend = () => {
+        const encodedMsg = encodeURIComponent(message);
+        const encodedGifts = encodeURIComponent(selectedTiles.join(','));
+        window.location.href = `/success?msg=${encodedMsg}&tiles=${encodedGifts}`;
+    };
+
     return (
         <main style={styles.container}>
             {/* BACKGROUND VIDEO */}
@@ -28,7 +34,7 @@ export default function VibeGreetingCreator() {
             {/* FLOATING SNOWFLAKES (Active during Preview) */}
             {isPreview && (
                 <div className="snowflakes">
-                    {[...Array(12)].map((_, i) => <div key={i} className="snowflake">❅</div>)}
+                    {[...Array(15)].map((_, i) => <div key={i} className="snowflake">❅</div>)}
                 </div>
             )}
 
@@ -36,7 +42,7 @@ export default function VibeGreetingCreator() {
                 /* --- EDITOR MODE --- */
                 <div style={styles.editorContainer}>
                     <div style={styles.whiteGridContainer}>
-                        <h4 style={styles.gridHeader}>BACKGROUNDS</h4>
+                        <h4 style={styles.gridHeader}>CHOOSE BACKGROUND</h4>
                         <div style={styles.videoGrid}>
                             {SCENES.map((scene) => (
                                 <button 
@@ -76,9 +82,9 @@ export default function VibeGreetingCreator() {
                         </div>
                         <textarea style={styles.input} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." />
                         
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                             <button onClick={() => setIsPreview(true)} style={styles.previewBtn}>👁️ Preview</button>
-                            <button onClick={() => window.location.href=`/success?msg=${encodeURIComponent(message)}&tiles=${encodeURIComponent(selectedTiles.join(','))}`} style={styles.sendBtn}>
+                            <button onClick={handleSend} style={styles.sendBtn}>
                                 Wrap & Send (0.99¢)
                             </button>
                         </div>
@@ -87,6 +93,11 @@ export default function VibeGreetingCreator() {
             ) : (
                 /* --- LIVE PREVIEW MODE --- */
                 <div style={styles.overlay}>
+                    {/* CONFIDENCE LABEL */}
+                    <div style={styles.previewLabel}>
+                        👁️ Recipient View: This is what they will see!
+                    </div>
+
                     <div style={styles.vibeCard}>
                         <h1 style={styles.vibeHeader}>A Winter Vibe for You!</h1>
                         <div style={styles.messageArea}>
@@ -106,8 +117,13 @@ export default function VibeGreetingCreator() {
             )}
 
             <style jsx global>{`
-                .snowflake { color: #fff; font-size: 1.5em; position: fixed; top: -10%; animation: snow 10s linear infinite; }
-                @keyframes snow { 0% { top: -10%; } 100% { top: 100%; } }
+                .snowflake { color: #fff; font-size: 1.5em; position: fixed; top: -10%; z-index: 1; animation: snow 10s linear infinite; }
+                @keyframes snow { 0% { top: -10%; } 100% { top: 110%; } }
+                @keyframes pulse {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.05); opacity: 0.8; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
             `}</style>
         </main>
     );
@@ -117,24 +133,25 @@ const styles = {
     container: { height: '100vh', width: '100vw', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' } as React.CSSProperties,
     video: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 } as React.CSSProperties,
     editorContainer: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' } as React.CSSProperties,
-    whiteGridContainer: { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.85)', padding: '12px', borderRadius: '25px', backdropFilter: 'blur(10px)', border: '1px solid white' } as React.CSSProperties,
+    whiteGridContainer: { position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.85)', padding: '12px', borderRadius: '25px', backdropFilter: 'blur(10px)', border: '1px solid white', zIndex: 20 } as React.CSSProperties,
     gridHeader: { color: '#ff4500', fontSize: '0.6rem', marginBottom: '8px', textAlign: 'center' as const },
     videoGrid: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' },
-    gridItem: { width: '55px', height: '55px', borderRadius: '12px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold' } as React.CSSProperties,
-    card: { background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '35px', width: '90%', maxWidth: '500px', textAlign: 'center' as const } as React.CSSProperties,
+    gridItem: { width: '55px', height: '55px', borderRadius: '12px', cursor: 'pointer', fontSize: '0.6rem', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' as const } as React.CSSProperties,
+    card: { background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '35px', width: '90%', maxWidth: '500px', textAlign: 'center' as const, boxShadow: '0 20px 40px rgba(0,0,0,0.2)' } as React.CSSProperties,
     cardTitle: { fontSize: '1.5rem', margin: '0 0 10px 0', color: '#333' },
     tapPrompt: { fontSize: '0.9rem', color: '#ff8c00', fontWeight: 'bold', marginBottom: '15px' },
     previewBox: { minHeight: '80px', marginBottom: '15px', padding: '15px', background: '#fff', borderRadius: '20px', border: '2px dashed #ffd700' },
     tokensDisplay: { fontSize: '1.2rem', lineHeight: '1.8', color: '#333' },
     normalWord: { cursor: 'pointer', padding: '2px 5px' },
-    selectedWord: { cursor: 'pointer', background: '#ffd700', borderRadius: '8px', padding: '4px 8px' },
-    input: { width: '100%', height: '70px', padding: '12px', borderRadius: '15px', border: '1px solid #ddd', marginBottom: '15px' },
+    selectedWord: { cursor: 'pointer', background: '#ffd700', borderRadius: '8px', padding: '4px 8px', fontWeight: 'bold' },
+    input: { width: '100%', height: '70px', padding: '12px', borderRadius: '15px', border: '1px solid #ddd', marginBottom: '10px' },
     previewBtn: { flex: 1, padding: '15px', borderRadius: '40px', border: '1px solid #ddd', background: '#eee', fontWeight: 'bold', cursor: 'pointer' },
     sendBtn: { flex: 2, padding: '15px', borderRadius: '40px', border: 'none', color: 'white', fontWeight: 'bold', background: 'linear-gradient(45deg, #ff4500, #ff8c00)', cursor: 'pointer' },
-    overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)' } as React.CSSProperties,
+    overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.3)', position: 'relative', zIndex: 100 } as React.CSSProperties,
+    previewLabel: { position: 'absolute', top: '30px', background: 'rgba(255, 69, 0, 0.9)', color: 'white', padding: '8px 20px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 'bold', zIndex: 110, boxShadow: '0 4px 15px rgba(0,0,0,0.3)', animation: 'pulse 2s infinite' } as React.CSSProperties,
     vibeCard: { background: 'rgba(255,255,255,0.9)', padding: '50px', borderRadius: '40px', border: '8px solid #ffd700', width: '90%', maxWidth: '700px', textAlign: 'center' as const } as React.CSSProperties,
     vibeHeader: { color: '#ff4500', fontSize: '2.2rem', marginBottom: '30px', fontWeight: 'bold' },
     messageArea: { fontSize: '2rem', color: '#333', lineHeight: '2.5' },
     giftStyle: { color: '#8b4513', fontWeight: 'bold', background: '#ffd700', padding: '0 10px', borderRadius: '10px', margin: '0 5px' },
-    backBtn: { background: '#666', color: 'white', padding: '12px 30px', borderRadius: '50px', border: 'none', marginTop: '40px', cursor: 'pointer' }
+    backBtn: { background: '#666', color: 'white', padding: '12px 30px', borderRadius: '50px', border: 'none', marginTop: '40px', cursor: 'pointer', fontWeight: 'bold' }
 };
