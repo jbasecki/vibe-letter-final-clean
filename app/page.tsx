@@ -3,24 +3,19 @@ import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const SCENES = [
-    { id: 'loveisall', name: 'Love' },
-    { id: 'daffodil-love', name: 'Winter' },
-    { id: 'digital-hug', name: 'Hug' },
-    { id: 'giftofheart', name: 'Heart' },
-    { id: 'happy-holidays', name: 'Holidays' },
-    { id: 'happy-newyear', name: 'New Year' },
-    { id: 'happy-newyear26', name: '2026' },
-    { id: 'joy-of-winter', name: 'Joy' },
-    { id: 'bigfeelings', name: 'Feelings' },
-    { id: 'midnight', name: 'Midnight' },
-    { id: 'magic-stars', name: 'Magic' },
-    { id: 'forest-vibe', name: 'Forest' }
+    { id: 'loveisall', name: 'Love' }, { id: 'winter-daffodil', name: 'Winter' },
+    { id: 'goldenglow', name: 'Glow' }, { id: 'midnight', name: 'Sparkle' },
+    { id: 'my-little', name: 'Little' }, { id: 'magic', name: 'Magic' },
+    { id: 'snowman', name: 'Snow' }, { id: 'cat-vibe', name: 'Cat' },
+    { id: 'flowers', name: 'Floral' }, { id: 'stars', name: 'Stars' },
+    { id: 'ocean', name: 'Ocean' }, { id: 'forest', name: 'Forest' }
 ];
 
 export default function SenderPage() {
     const [message, setMessage] = useState("");
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(SCENES[0]);
+    const [isPreview, setIsPreview] = useState(false);
 
     const tokens = message.split(/(\s+)/);
 
@@ -36,9 +31,10 @@ export default function SenderPage() {
                 const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
                 await stripe?.redirectToCheckout({ sessionId: data.id });
             } else {
+                // This alert will clear once you rename the Vercel keys
                 alert("Stripe session failed. Check your Vercel Environment Variables!");
             }
-        } catch (err) { console.error(err); }
+        } catch (err) { console.error("Checkout Error:", err); }
     };
 
     const toggleTile = (word: string) => {
@@ -67,35 +63,52 @@ export default function SenderPage() {
                         ))}
                     </div>
                 </div>
-                <button style={styles.eyeBtn}>👁️</button>
+                {/* ACTIVE EYE TOGGLE */}
+                <button onClick={() => setIsPreview(!isPreview)} style={styles.eyeBtn}>
+                    {isPreview ? '✍️' : '👁️'}
+                </button>
             </div>
 
             <div style={styles.overlay}>
                 <div style={styles.editorCard}>
-                    <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
-                    {/* RESTORED GIFT WORD PICKER AREA */}
-                    <div style={styles.inputArea}>
-                        {tokens.map((token, i) => {
-                            const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
-                            const isSelected = selectedTiles.includes(clean);
-                            return (
-                                <span key={i} onClick={() => toggleTile(token)} style={{
-                                    ...styles.token,
-                                    background: isSelected ? '#ffd700' : 'transparent',
-                                    border: isSelected ? '1px solid #b8860b' : 'none'
-                                }}>
-                                    {token}
-                                </span>
-                            );
-                        })}
-                    </div>
-                    <textarea 
-                        style={styles.hiddenInput} 
-                        value={message} 
-                        onChange={(e) => setMessage(e.target.value)} 
-                        placeholder="Type your message here..." 
-                    />
-                    <button onClick={handleSend} style={styles.sendBtn}>Wrap & Send (0.99¢)</button>
+                    {isPreview ? (
+                        <>
+                            <h2 style={{ color: '#ff4500' }}>Gift Preview</h2>
+                            <div style={styles.previewArea}>
+                                {tokens.map((token, i) => {
+                                    const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
+                                    return selectedTiles.includes(clean) ? <span key={i} style={styles.giftWord}>🎁 {token} 🎁</span> : token;
+                                })}
+                            </div>
+                            <button onClick={() => setIsPreview(false)} style={styles.backBtn}>Back to Editor</button>
+                        </>
+                    ) : (
+                        <>
+                            <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
+                            <div style={styles.inputArea}>
+                                {tokens.map((token, i) => {
+                                    const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
+                                    const isSelected = selectedTiles.includes(clean);
+                                    return (
+                                        <span key={i} onClick={() => toggleTile(token)} style={{
+                                            ...styles.token,
+                                            background: isSelected ? '#ffd700' : 'transparent',
+                                            border: isSelected ? '1px solid #b8860b' : 'none'
+                                        }}>
+                                            {token}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                            <textarea 
+                                style={styles.hiddenInput} 
+                                value={message} 
+                                onChange={(e) => setMessage(e.target.value)} 
+                                placeholder="Type your message here..." 
+                            />
+                            <button onClick={handleSend} style={styles.sendBtn}>Wrap & Send (0.99¢)</button>
+                        </>
+                    )}
                 </div>
             </div>
         </main>
@@ -115,5 +128,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     inputArea: { minHeight: '80px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', marginBottom: '15px', textAlign: 'left' },
     token: { cursor: 'pointer', padding: '2px 4px', borderRadius: '4px' },
     hiddenInput: { width: '100%', height: '80px', padding: '15px', borderRadius: '15px', border: '1px solid #ddd', marginBottom: '20px' },
-    sendBtn: { background: '#ff6600', color: 'white', padding: '18px 50px', borderRadius: '60px', border: 'none', fontSize: '1.4rem', fontWeight: 'bold', cursor: 'pointer' }
+    sendBtn: { background: '#ff6600', color: 'white', padding: '18px 50px', borderRadius: '60px', border: 'none', fontSize: '1.4rem', fontWeight: 'bold', cursor: 'pointer' },
+    previewArea: { fontSize: '1.4rem', margin: '20px 0', lineHeight: '1.8', textAlign: 'left' },
+    giftWord: { color: '#ff6600', fontWeight: 'bold' },
+    backBtn: { background: '#444', color: '#fff', padding: '10px 20px', borderRadius: '30px', border: 'none', cursor: 'pointer' }
 };
