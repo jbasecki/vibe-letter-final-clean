@@ -19,6 +19,9 @@ export default function SenderPage() {
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
+    // The box only wiggles when it is empty
+    const shouldWiggle = selectedTiles.length === 0;
+
     const handleSend = async () => {
         try {
             const res = await fetch('/api/checkout', {
@@ -49,30 +52,35 @@ export default function SenderPage() {
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div style={{ background: 'rgba(255,255,255,0.96)', padding: '20px 30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '900px' : '650px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
-                        <h2 style={{ marginBottom: '5px', fontSize: '1.4rem' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        <div style={{ minHeight: '380px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                        {/* BOX AREA: Padding added at top to show the Bow */}
+                        <div style={{ minHeight: '400px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', paddingTop: '30px' }}>
                             
-                            {/* LARGE PREDETERMINED WIGGLING BOX */}
-                            <div style={{ position: 'relative', width: '450px', animation: 'slowWiggle 6s infinite ease-in-out', pointerEvents: 'none' }}>
+                            <div style={{ 
+                                position: 'relative', 
+                                width: '450px', 
+                                animation: shouldWiggle ? 'slowWiggle 6s infinite ease-in-out' : 'none',
+                                pointerEvents: 'none' 
+                            }}>
                                 <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                <p style={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '1.8rem', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Send a Vibe</p>
                                 
-                                {/* ALPHABET CARDS: Clipped directly onto the large box */}
-                                <div style={{ position: 'absolute', bottom: '65px', left: '10%', right: '10%', display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                                {/* Label remains under the box */}
+                                <p style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '1.8rem', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Send a Vibe</p>
+                                
+                                {/* Alphabet Cards: Shrunken slightly to ensure bow visibility */}
+                                <div style={{ position: 'absolute', bottom: '60px', left: '10%', right: '10%', display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
                                     {selectedTiles.map((tile, idx) => (
                                         <div key={idx} style={{ display: 'flex', gap: '5px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '80px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '80px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
 
-                        {/* INTERACTIVE TEXT AREA: Positioned below the box for full functionality */}
                         {!isPreview && (
-                            <div style={{ position: 'relative', zIndex: 20, marginTop: '10px' }}>
+                            <div style={{ position: 'relative', zIndex: 20, marginTop: '5px' }}>
                                 <div style={{ textAlign: 'left', lineHeight: '1.6', fontSize: '1.1rem', marginBottom: '8px', maxHeight: '60px', overflowY: 'auto', background: '#fff', padding: '10px', borderRadius: '15px' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
@@ -80,7 +88,7 @@ export default function SenderPage() {
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#ff6600' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
-                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '50px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1rem' }} />
+                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '45px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1rem' }} />
                             </div>
                         )}
                         
@@ -90,7 +98,6 @@ export default function SenderPage() {
                         </div>
                     </div>
 
-                    {/* SIDEBAR GRID */}
                     <div style={{ marginLeft: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                             {SCENES.map((s) => (
