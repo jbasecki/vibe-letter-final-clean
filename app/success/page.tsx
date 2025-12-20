@@ -7,8 +7,9 @@ export default function SuccessPage() {
     const msg = searchParams.get('msg') || "";
     const scene = searchParams.get('scene') || "loveisall";
     const tiles = searchParams.get('tiles')?.split(',') || [];
-
     const tokens = msg.split(/(\s+)/);
+
+    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
@@ -17,18 +18,28 @@ export default function SuccessPage() {
             </video>
             
             <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                <div style={{ background: 'rgba(255,255,255,0.9)', padding: '40px', borderRadius: '50px', border: '10px solid #ffd700', textAlign: 'center', maxWidth: '90%' }}>
-                    <h1 style={{ color: '#28a745', fontSize: '2.5rem', marginBottom: '20px' }}>Ready to Send! 🥳</h1>
-                    
-                    {/* ENHANCED LINK DISPLAY */}
-                    <div style={{ background: '#f0f0f0', padding: '20px', borderRadius: '15px', marginBottom: '25px', wordBreak: 'break-all' }}>
-                        <p style={{ color: '#ff4500', fontWeight: 'bold' }}>Copy & Share this link:</p>
-                        <code>https://vibe-letter-final-clean.vercel.app/receiver/vibe?msg={encodeURIComponent(msg)}&tiles={tiles.join(',')}</code>
+                <div style={{ background: 'rgba(255,255,255,0.9)', padding: '40px', borderRadius: '50px', border: '10px solid #ffd700', textAlign: 'center', maxWidth: '85%' }}>
+                    <h1 style={{ color: '#28a745', fontSize: '2.5rem' }}>Ready to Send! 🥳</h1>
+                    <div style={{ fontSize: '1.8rem', margin: '20px 0', lineHeight: '2' }}>
+                        {tokens.map((token, i) => {
+                            const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
+                            if (tiles.includes(clean)) {
+                                const f = token.charAt(0);
+                                const l = token.charAt(token.length - 1);
+                                return (
+                                    <span key={i} style={{ display: 'inline-flex', gap: '5px', verticalAlign: 'middle', margin: '0 8px' }}>
+                                        <img src={getLetterUrl(f)} style={{ width: '70px' }} />
+                                        <img src={getLetterUrl(l)} style={{ width: '70px' }} />
+                                    </span>
+                                );
+                            }
+                            return token;
+                        })}
                     </div>
-
-                    <button onClick={() => window.location.href = '/'} style={{ background: '#ff6600', color: 'white', padding: '15px 40px', borderRadius: '50px', border: 'none', fontSize: '1.2rem', cursor: 'pointer' }}>
-                        Create Another One
-                    </button>
+                    <div style={{ background: '#f8f8f8', padding: '15px', borderRadius: '15px', wordBreak: 'break-all', fontSize: '0.85rem' }}>
+                        <p style={{ fontWeight: 'bold', color: '#ff6600' }}>Copy this gift link:</p>
+                        <code>https://vibe-letter-final-clean.vercel.app/receiver/vibe?msg={encodeURIComponent(msg)}&tiles={tiles.join(',')}&scene={scene}</code>
+                    </div>
                 </div>
             </div>
         </main>
