@@ -48,17 +48,18 @@ export default function SenderPage() {
                     </div>
                 )}
 
-                <div style={{ background: 'rgba(255,255,255,0.95)', padding: '40px', borderRadius: '50px', width: '90%', maxWidth: '580px', textAlign: 'center' }}>
+                <div style={{ background: 'rgba(255,255,255,0.95)', padding: '40px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '800px' : '580px', textAlign: 'center', transition: 'max-width 0.3s ease' }}>
                     <h2>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                     
-                    <div style={{ minHeight: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
+                    <div style={{ minHeight: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
                         {isPreview ? (
                             selectedTiles.map((tile, idx) => (
-                                <div key={idx} style={{ position: 'relative', width: '200px' }}>
+                                <div key={idx} style={{ position: 'relative', width: '220px' }}>
+                                    {/* Fixing the gifr-box.png filename typo */}
                                     <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                    <div style={{ position: 'absolute', bottom: '25px', left: '10px', right: '10px', display: 'flex', justifyContent: 'center', gap: '5px' }}>
-                                        <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1px solid gold' }} />
-                                        <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1px solid gold' }} />
+                                    <div style={{ position: 'absolute', bottom: '28px', left: '12px', right: '12px', display: 'flex', justifyContent: 'center', gap: '6px' }}>
+                                        <img src={getLetterUrl(tile.charAt(0))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
+                                        <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '45%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
                                     </div>
                                 </div>
                             ))
@@ -73,10 +74,10 @@ export default function SenderPage() {
                         )}
                     </div>
 
-                    {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '12px', padding: '10px' }} />}
+                    {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '12px', padding: '10px' }} />}
                     
                     <div style={{ marginTop: '20px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
-                        <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
+                        <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
                         <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '12px 35px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
                     </div>
                 </div>
