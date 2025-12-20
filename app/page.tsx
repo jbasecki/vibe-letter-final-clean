@@ -19,8 +19,8 @@ export default function SenderPage() {
 
     const tokens = message.split(/(\s+)/);
 
-    const handleCreate = () => {
-        // Instead of calling Stripe, we go straight to Success
+    const handleCreateFree = () => {
+        // Direct bypass of Stripe for instant stability
         const query = `msg=${encodeURIComponent(message)}&tiles=${encodeURIComponent(selectedTiles.join(','))}&scene=${selectedScene.id}`;
         router.push(`/success?${query}`);
     };
@@ -56,6 +56,9 @@ export default function SenderPage() {
             <div style={styles.overlay}>
                 <div style={styles.editorCard}>
                     <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
+                    <p style={{ color: '#b8860b', fontSize: '0.9rem', marginBottom: '10px' }}>
+                        ✨ Tapped words become symmetrical alphabet art!
+                    </p>
                     <div style={styles.inputArea}>
                         {tokens.map((token, i) => {
                             const clean = token.toLowerCase().replace(/[.,!?;:]/g, "").trim();
@@ -63,7 +66,8 @@ export default function SenderPage() {
                             return (
                                 <span key={i} onClick={() => toggleTile(token)} style={{
                                     ...styles.token,
-                                    background: isSelected ? '#ffd700' : 'transparent'
+                                    background: isSelected ? '#ffd700' : 'transparent',
+                                    padding: '2px 4px', borderRadius: '4px', cursor: 'pointer'
                                 }}>
                                     {token}
                                 </span>
@@ -76,8 +80,7 @@ export default function SenderPage() {
                         onChange={(e) => setMessage(e.target.value)} 
                         placeholder="Type your message..." 
                     />
-                    {/* Changed button text to reflect free use */}
-                    <button onClick={handleCreate} style={styles.sendBtn}>Create Vibe Gift (Free)</button>
+                    <button onClick={handleCreateFree} style={styles.sendBtn}>Create Vibe Link (Free) ✨</button>
                 </div>
             </div>
         </main>
@@ -94,7 +97,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     overlay: { height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10, position: 'relative' },
     editorCard: { background: 'rgba(255,255,255,0.98)', padding: '40px', borderRadius: '50px', width: '90%', maxWidth: '540px', textAlign: 'center' },
     inputArea: { minHeight: '80px', padding: '15px', background: '#fff', borderRadius: '20px', border: '1px solid #eee', marginBottom: '15px', textAlign: 'left' },
-    token: { cursor: 'pointer', padding: '2px 4px', borderRadius: '4px' },
     hiddenInput: { width: '100%', height: '80px', padding: '15px', borderRadius: '15px', border: '1px solid #ddd', marginBottom: '20px' },
     sendBtn: { background: '#ff6600', color: 'white', padding: '18px 50px', borderRadius: '60px', border: 'none', fontSize: '1.4rem', fontWeight: 'bold', cursor: 'pointer' }
 };
