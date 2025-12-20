@@ -48,48 +48,45 @@ export default function SenderPage() {
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '850px' : '620px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
-                        <h2 style={{ marginBottom: '5px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
+                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '20px 30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '900px' : '650px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
+                        <h2 style={{ marginBottom: '5px', fontSize: '1.4rem' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
-                        <div style={{ minHeight: '320px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', flexWrap: 'wrap', padding: '10px 0' }}>
-                            {isPreview || selectedTiles.length > 0 ? (
-                                selectedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ position: 'relative', width: '280px', animation: 'gentleWiggle 4s infinite ease-in-out' }}>
-                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                        <div style={{ position: 'absolute', bottom: '38px', left: '15px', right: '15px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '42%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '42%', borderRadius: '4px', border: '1.5px solid gold', boxShadow: '0 4px 8px rgba(0,0,0,0.3)' }} />
+                        <div style={{ minHeight: '380px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+                            
+                            {/* LARGE PREDETERMINED WIGGLING BOX */}
+                            <div style={{ position: 'relative', width: '450px', animation: 'slowWiggle 6s infinite ease-in-out', pointerEvents: 'none' }}>
+                                <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
+                                <p style={{ position: 'absolute', bottom: '20px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '1.8rem', textShadow: '2px 2px 4px rgba(255,255,255,0.8)' }}>Send a Vibe</p>
+                                
+                                {/* ALPHABET CARDS: Clipped directly onto the large box */}
+                                <div style={{ position: 'absolute', bottom: '65px', left: '10%', right: '10%', display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap' }}>
+                                    {selectedTiles.map((tile, idx) => (
+                                        <div key={idx} style={{ display: 'flex', gap: '5px' }}>
+                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
+                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', borderRadius: '8px', border: '2px solid gold', boxShadow: '0 4px 10px rgba(0,0,0,0.4)' }} />
                                         </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    {/* 3X LARGER WIGGLING BOX */}
-                                    <div style={{ position: 'relative', width: '300px', marginBottom: '10px', animation: 'gentleWiggle 4s infinite ease-in-out' }}>
-                                        <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
-                                        <p style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center', color: '#ff6600', fontWeight: 'bold', fontSize: '1.4rem', textShadow: '1px 1px 2px white' }}>Send a Vibe</p>
-                                    </div>
+                                    ))}
                                 </div>
-                            )}
+                            </div>
                         </div>
 
-                        {/* INPUT AREA: Higher Z-Index to ensure clickability */}
+                        {/* INTERACTIVE TEXT AREA: Positioned below the box for full functionality */}
                         {!isPreview && (
-                            <div style={{ position: 'relative', zIndex: 20 }}>
-                                <div style={{ textAlign: 'left', lineHeight: '1.8', fontSize: '1.1rem', marginBottom: '10px', maxHeight: '80px', overflowY: 'auto' }}>
+                            <div style={{ position: 'relative', zIndex: 20, marginTop: '10px' }}>
+                                <div style={{ textAlign: 'left', lineHeight: '1.6', fontSize: '1.1rem', marginBottom: '8px', maxHeight: '60px', overflowY: 'auto', background: '#fff', padding: '10px', borderRadius: '15px' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                         const isSel = selectedTiles.includes(clean);
                                         return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 4px', borderRadius: '4px', cursor: 'pointer', background: isSel ? '#ff6600' : 'transparent', color: isSel ? '#fff' : '#000' }}>{t}</span>
                                     })}
                                 </div>
-                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '60px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1rem' }} />
+                                <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '50px', borderRadius: '12px', padding: '10px', border: '1px solid #ddd', fontSize: '1rem' }} />
                             </div>
                         )}
                         
                         <div style={{ marginTop: '15px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
-                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '10px 20px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
-                            <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '10px 30px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
+                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '10px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
+                            <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '10px 35px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
                         </div>
                     </div>
 
@@ -105,9 +102,9 @@ export default function SenderPage() {
                 </div>
             )}
             <style jsx>{`
-                @keyframes gentleWiggle {
-                    0%, 100% { transform: rotate(-3deg) scale(1); }
-                    50% { transform: rotate(3deg) scale(1.05); }
+                @keyframes slowWiggle {
+                    0%, 100% { transform: rotate(-1.5deg) scale(1); }
+                    50% { transform: rotate(1.5deg) scale(1.02); }
                 }
             `}</style>
         </main>
