@@ -104,6 +104,7 @@ export default function SenderPage() {
                     ) : (
                         <>
                             <h2 style={{ color: '#ff4500' }}>Vibe Greeting Shop</h2>
+                            
                             <p style={{ color: '#b8860b', fontSize: '0.9rem', marginBottom: '10px' }}>
                                 ✨ Tapped words become symmetrical alphabet art in your final gift!
                             </p>
