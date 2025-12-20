@@ -13,8 +13,8 @@ export default function SenderPage() {
     const [message, setMessage] = useState("");
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(SCENES[0]);
-    const [isPreview, setIsPreview] = useState(false);
-    const [isCleanView, setIsCleanView] = useState(false);
+    const [isPreview, setIsPreview] = useState(false); // For the Box Preview
+    const [isCleanView, setIsCleanView] = useState(false); // For the Eye toggle
 
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
@@ -36,26 +36,27 @@ export default function SenderPage() {
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-            {/* CLEAN CINEMATIC BACKGROUND */}
             <video key={selectedScene.id} autoPlay loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            {/* THE EYE: CLEAN VIEW EXIT BUTTON */}
+            {/* EYE TOGGLE: CLEAN VIEW */}
             {isCleanView && (
                 <div onClick={() => setIsCleanView(false)} style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 100, cursor: 'pointer', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', paddingBottom: '60px' }}>
-                    <div style={{ background: '#fff', padding: '15px 25px', borderRadius: '50px', fontWeight: 'bold', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>✍️ Tap to Edit</div>
+                    <div style={{ background: '#fff', padding: '15px 25px', borderRadius: '50px', fontWeight: 'bold', boxShadow: '0 0 20px rgba(0,0,0,0.5)' }}>✍️ Tap to return to Editor</div>
                 </div>
             )}
 
             {!isCleanView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {/* UI CARD */}
-                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '40px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '820px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
+                    
+                    {/* MAIN CARD */}
+                    <div style={{ background: 'rgba(255,255,255,0.96)', padding: '30px', borderRadius: '50px', width: '95%', maxWidth: isPreview ? '820px' : '580px', textAlign: 'center', boxShadow: '0 20px 60px rgba(0,0,0,0.3)', transition: 'max-width 0.3s' }}>
                         <h2 style={{ marginBottom: '10px' }}>{isPreview ? "👁️ Preview" : "Vibe Greeting Shop"}</h2>
                         
                         <div style={{ minHeight: '180px', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '25px', flexWrap: 'wrap' }}>
                             {isPreview ? (
+                                /* BOX PREVIEW */
                                 selectedTiles.map((tile, idx) => (
                                     <div key={idx} style={{ position: 'relative', width: '220px' }}>
                                         <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" style={{ width: '100%' }} />
@@ -66,6 +67,7 @@ export default function SenderPage() {
                                     </div>
                                 ))
                             ) : (
+                                /* WORD SELECTION */
                                 <div style={{ textAlign: 'left', lineHeight: '2', fontSize: '1.2rem' }}>
                                     {tokens.map((t, i) => {
                                         const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
@@ -76,22 +78,22 @@ export default function SenderPage() {
                             )}
                         </div>
 
-                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '70px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
+                        {!isPreview && <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '100%', height: '60px', marginTop: '15px', borderRadius: '15px', padding: '12px', border: '1px solid #ddd' }} />}
                         
-                        <div style={{ marginTop: '25px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
-                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '✨ Review'}</button>
+                        <div style={{ marginTop: '20px', display: 'flex', gap: '15px', justifyContent: 'center' }}>
+                            <button onClick={() => setIsPreview(!isPreview)} style={{ background: '#eee', padding: '12px 25px', borderRadius: '50px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>{isPreview ? '✍️ Edit' : '👁️ Preview'}</button>
                             <button onClick={handleSend} style={{ background: '#ff6600', color: '#fff', padding: '12px 35px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>Wrap & Send (0.99¢)</button>
                         </div>
                     </div>
 
-                    {/* SIDEBAR GRID & EYE */}
+                    {/* SIDEBAR: GRID + EYE */}
                     <div style={{ marginLeft: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
                         <div style={{ background: 'rgba(255,255,255,0.85)', padding: '15px', borderRadius: '25px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '55px', height: '55px', borderRadius: '15px', border: selectedScene.id === s.id ? '3px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '50px', height: '50px', borderRadius: '12px', border: selectedScene.id === s.id ? '3px solid #ff6600' : '1px solid #ccc', background: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCleanView(true)} style={{ background: '#fff', border: '2px solid #ff6600', borderRadius: '20px', padding: '15px', cursor: 'pointer', fontSize: '1.8rem' }}>👁️</button>
+                        <button onClick={() => setIsCleanView(true)} style={{ background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: '20px', padding: '15px', cursor: 'pointer', fontSize: '1.8rem', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>👁️</button>
                     </div>
                 </div>
             )}
