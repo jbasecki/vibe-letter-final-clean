@@ -1,57 +1,109 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 
-export default function ReceiverPage() {
-    // These would eventually be loaded from your database via a URL ID
-    const [receivedMessage, setReceivedMessage] = useState("have a great evening and lots of love for the New Year!");
-    const [receivedTiles, setReceivedTiles] = useState(["great", "evening", "love", "New", "Year!"]);
-    const [sceneId, setSceneId] = useState("two"); // Defaulting to the New Year scene
+import React, { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 
-    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
+export default function SenderPage() {
+    const [message, setMessage] = useState("");
+    const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
+
+    const handleWrap = async () => {
+        // This connects to your Stripe flow for the 0.99c charge
+        console.log("Wrapping message and selected words:", message, selectedTiles);
+    };
+
+    const toggleTile = (word: string) => {
+        if (selectedTiles.includes(word)) {
+            setSelectedTiles(selectedTiles.filter(t => t !== word));
+        } else if (selectedTiles.length < 2) {
+            setSelectedTiles([...selectedTiles, word]);
+        }
+    };
+
+    const words = message.split(/\s+/).filter(w => w.length > 0);
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-            {/* Background Cinematic Scene */}
-            <video key={sceneId} autoPlay loop playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
-                <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
+            
+            {/* 1. THE SNOWMAN BACKGROUND */}
+            <video autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }}>
+                <source src="https://storage.googleapis.com/simple-bucket-27/one.mp4" type="video/mp4" />
             </video>
 
-            <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* 2. THE INTERACTIVE INTERFACE */}
+            <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.1)' }}>
+                
+                {/* THE "ALL-IN-ONE" INTERACTION BOX */}
+                <div style={{ 
+                    background: 'rgba(0,0,0,0.85)', 
+                    padding: '30px', 
+                    borderRadius: '25px', 
+                    border: '2px solid #0070f3', 
+                    textAlign: 'center',
+                    width: '90%',
+                    maxWidth: '500px',
+                    boxShadow: '0 0 30px rgba(0,112,243,0.5)'
+                }}>
                     
-                    <h1 style={{ color: '#fff', marginBottom: '20px', textShadow: '0 0 10px #0070f3' }}>✨ You received a Vibe!</h1>
+                    {/* INTEGRATED HEADER SIGN */}
+                    <h1 style={{ color: '#fff', fontSize: '2rem', margin: '0 0 5px 0', textShadow: '0 0 10px #0070f3' }}>
+                        Sending a Heart in a Box
+                    </h1>
 
-                    {/* BOX AREA: The Revealed Secret */}
-                    <div style={{ position: 'relative', width: '450px', minHeight: '400px', background: 'rgba(0,0,0,0.6)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '2px solid #0070f3', perspective: '1000px', boxShadow: '0 0 30px rgba(0,112,243,0.4)' }}>
-                        <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
-                            <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '90%', filter: 'drop-shadow(0 0 15px rgba(0, 112, 243, 0.6))' }} />
-                            
-                            <div style={{ position: 'absolute', bottom: '60px', left: 0, right: 0, display: 'flex', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', padding: '0 10px' }}>
-                                {receivedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                        <div style={{ display: 'flex', gap: '4px' }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '60px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 10px #0070f3', transform: 'rotateY(20deg) skewY(-4deg)' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '60px', borderRadius: '5px', border: '2px solid #0070f3', boxShadow: '0 0 10px #0070f3', transform: 'rotateY(-20deg) skewY(4deg)' }} />
-                                        </div>
-                                        <span style={{ color: '#0070f3', fontSize: '0.8rem', fontWeight: 'bold', background: 'rgba(0,0,0,0.8)', padding: '1px 6px', borderRadius: '8px', marginTop: '4px' }}>{tile}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                    {/* NEW TINY INSTRUCTION */}
+                    <p style={{ color: '#0070f3', fontSize: '1rem', fontWeight: 'bold', fontStyle: 'italic', margin: '0 0 20px 0' }}>
+                        click on one or two words to send them to the box:
+                    </p>
+
+                    {/* COMPOSING LINE (Word selection) */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px', marginBottom: '20px' }}>
+                        {words.length > 0 ? words.map((word, idx) => (
+                            <span 
+                                key={idx} 
+                                onClick={() => toggleTile(word)}
+                                style={{ 
+                                    cursor: 'pointer',
+                                    color: selectedTiles.includes(word) ? '#fff' : '#0070f3',
+                                    background: selectedTiles.includes(word) ? '#0070f3' : 'transparent',
+                                    padding: '4px 10px',
+                                    borderRadius: '10px',
+                                    border: '1px solid #0070f3',
+                                    fontSize: '1.1rem'
+                                }}
+                            >
+                                {word}
+                            </span>
+                        )) : <span style={{ color: '#555' }}>Start typing below...</span>}
                     </div>
 
-                    {/* Full Message Reveal */}
-                    <div style={{ width: '650px', marginTop: '30px', background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '20px 30px', borderRadius: '15px', border: '1px solid #0070f3', textAlign: 'center', fontSize: '1.4rem', lineHeight: '1.5', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
-                        {receivedMessage}
+                    {/* MESSAGE INPUT */}
+                    <textarea 
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Type your secret vibe here..."
+                        style={{
+                            width: '100%', height: '80px', background: 'rgba(255,255,255,0.05)',
+                            border: '1px solid #333', borderRadius: '10px', color: 'white',
+                            padding: '12px', fontSize: '1rem', marginBottom: '20px', outline: 'none'
+                        }}
+                    />
+
+                    {/* BLUE BOX CENTERPIECE */}
+                    <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '220px', filter: 'drop-shadow(0 0 15px #0070f3)' }} />
                     </div>
 
-                    {/* THE VIRAL "HUG BACK" BUTTON */}
-                    <Link href="/" style={{ textDecoration: 'none' }}>
-                        <button style={{ marginTop: '30px', background: '#0070f3', color: '#fff', padding: '15px 60px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.6rem', cursor: 'pointer', boxShadow: '0 0 25px rgba(0,112,243,0.8)', transition: 'transform 0.2s' }}>
-                            💙 Send a Hug Back
-                        </button>
-                    </Link>
+                    {/* WRAP BUTTON (0.99¢) */}
+                    <button 
+                        onClick={handleWrap}
+                        style={{
+                            background: '#0070f3', color: '#fff', border: 'none',
+                            padding: '15px 50px', borderRadius: '50px', fontSize: '1.4rem',
+                            fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 0 20px #0070f3'
+                        }}
+                    >
+                        Wrap Message (0.99¢)
+                    </button>
                 </div>
             </div>
         </main>
