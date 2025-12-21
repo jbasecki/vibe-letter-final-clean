@@ -55,7 +55,7 @@ export default function SenderPage() {
                         <div style={{ position: 'relative', width: '300px', height: '300px', background: 'white', borderRadius: '15px', display: 'flex', justifyContent: 'center', alignItems: 'center', boxShadow: '0 0 15px gold', overflow: 'visible' }}>
                             <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                 {/* BOX IMAGE: Stretched to 95% of the frame to fit snugly */}
-                                <img src="https://storage.googleapis.com/simple-bucket-27/gifr-box.png" 
+                                <img src="https://storage.googleapis.com/simple-bucket-27/re-box.png" 
                                      style={{ width: '95%', objectFit: 'contain', filter: 'hue-rotate(320deg) saturate(3) drop-shadow(0 0 8px gold)' }} />
                                 
                                 {selectedTiles.length > 0 && (
