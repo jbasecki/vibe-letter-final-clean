@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: apiVersion: '2024-04-10', // This is a stable Stripe version
+ apiVersion: '2024-04-10', // This is a stable Stripe version
 });
 
 export default stripe;
