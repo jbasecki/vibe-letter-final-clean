@@ -1,4 +1,4 @@
-'use client';
+'use client'; // This MUST be line 1
 
 import React, { useState } from 'react';
 
@@ -6,7 +6,7 @@ export default function SenderPage() {
     const [message, setMessage] = useState("");
 
     const handleWrap = async () => {
-        // This links your button to the live checkout logic
+        // This links to your route.ts for the 0.99c charge
         console.log("Wrapping message...");
     };
 
