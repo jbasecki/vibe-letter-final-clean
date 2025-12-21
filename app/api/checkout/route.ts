@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
-import stripe from '@/lib/stripe'; // Ensure you have stripe initialized here
+import stripe from '../../lib/stripe'; // Ensure you have stripe initialized here
 import { sql } from '@vercel/postgres'; // Example for Vercel Postgres
 
 export async function POST(req: Request) {
