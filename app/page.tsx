@@ -77,20 +77,27 @@ export default function SenderPage() {
                             </div>
                         </div>
 
-                        {/* RESTORED YOUR TEXT HERE */}
                         <button onClick={handlePaymentAndSend} style={{ width: '450px', marginTop: '-25px', background: '#0070f3', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', zIndex: 30 }}>
                             TRY TO CLICK ON SOME WORDS
                         </button>
 
+                        {/* BOTH WRITING LINES ARE NOW 650PX WIDE */}
                         <div style={{ width: '650px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px 25px', borderRadius: '15px', border: '1px solid #0070f3', minHeight: '55px' }}>
+                            <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px 25px', borderRadius: '15px', border: '1px solid #0070f3', minHeight: '55px', width: '100%' }}>
                                 {tokens.map((t, i) => {
                                     const clean = t.toLowerCase().replace(/[.,!?;:]/g, "").trim();
                                     const isSel = selectedTiles.includes(clean);
                                     return <span key={i} onClick={() => clean && setSelectedTiles(prev => isSel ? prev.filter(x => x !== clean) : [...prev, clean])} style={{ padding: '2px 5px', borderRadius: '5px', cursor: 'pointer', background: isSel ? '#0070f3' : 'transparent' }}>{t}</span>
                                 })}
                             </div>
-                            <textarea value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', height: '60px', borderRadius: '15px', padding: '15px 25px', border: '1px solid #0070f3', background: 'rgba(0,0,0,0.85)', color: '#fff', fontSize: '1.2rem', resize: 'none' }} />
+                            
+                            {/* RESTORED PLACEHOLDER & INCREASED HEIGHT */}
+                            <textarea 
+                                value={message} 
+                                onChange={(e) => setMessage(e.target.value)} 
+                                placeholder="Type your message here..." 
+                                style={{ width: '100%', height: '80px', borderRadius: '15px', padding: '15px 25px', border: '1px solid #0070f3', background: 'rgba(0,0,0,0.85)', color: '#fff', fontSize: '1.2rem', resize: 'none' }} 
+                            />
                         </div>
                     </div>
 
@@ -104,7 +111,8 @@ export default function SenderPage() {
                         <div style={{ display: 'flex', gap: '15px' }}>
                             <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid #0070f3', borderRadius: '30px', padding: '15px 25px', cursor: 'pointer', fontSize: '2rem', color: '#fff', boxShadow: '0 0 15px gold' }}>👁️</button>
                             
-                            <button onClick={handlePaymentAndSend} style={{ background: '#0070f3', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', cursor: 'pointer', fontSize: '1.1rem', color: '#fff', fontWeight: 'bold' }}>
+                            {/* BLACK SEND BUTTON */}
+                            <button onClick={handlePaymentAndSend} style={{ background: '#000', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', cursor: 'pointer', fontSize: '1.1rem', color: '#fff', fontWeight: 'bold' }}>
                                 SEND (0.99¢)
                             </button>
                         </div>
