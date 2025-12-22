@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     const { message, tiles, sceneId } = await req.json();
     const id = uuidv4();
 
-    // Saves the message to your new vibes table
+    // Saves the message to your vibes table
     await sql`
       INSERT INTO vibes (id, message, tiles, scene_id, paid)
       VALUES (${id}, ${message}, ${JSON.stringify(tiles)}, ${sceneId}, false)
@@ -22,14 +22,15 @@ export async function POST(req: Request) {
       payment_method_types: ['card'],
       line_items: [
         {
-          // MATCHED TO YOUR LIVE STRIPE ID
+          // YOUR LIVE STRIPE ID FROM SCREENSHOT
           price: 'price_1SgwZAJjJj9v8YFVKRZ9yWlx', 
           quantity: 1,
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_URL}/success?id=${id}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_URL}`,
+      // HARDCODED URLS TO PREVENT "INVALID URL" ERROR
+      success_url: `https://vibe-letter-final-clean.vercel.app/success?id=${id}`,
+      cancel_url: `https://vibe-letter-final-clean.vercel.app`,
       metadata: { vibeId: id },
     });
 
