@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const SCENES = [
@@ -14,9 +14,18 @@ export default function SenderPage() {
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(SCENES[0]);
     const [isCinematicView, setIsCinematicView] = useState(false);
+    const [isMuted, setIsMuted] = useState(true);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
+
+    const toggleAudio = () => {
+        if (videoRef.current) {
+            videoRef.current.muted = !videoRef.current.muted;
+            setIsMuted(videoRef.current.muted);
+        }
+    };
 
     const toggleTile = (rawWord: string) => {
         const clean = rawWord.trim().replace(/[.,!?;:]/g, "");
@@ -43,9 +52,21 @@ export default function SenderPage() {
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-            <video key={selectedScene.id} autoPlay loop playsInline muted style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
+            <video ref={videoRef} key={selectedScene.id} autoPlay loop playsInline muted={isMuted} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
+
+            {/* SOUND BUTTON (TOP LEFT) */}
+            <button onClick={toggleAudio} style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '2px solid #0070f3', borderRadius: '50%', width: '55px', height: '55px', color: '#fff', fontSize: '1.5rem', cursor: 'pointer' }}>
+                {isMuted ? '🔇' : '🔊'}
+            </button>
+
+            {/* EDIT BUTTON (TOP RIGHT - ONLY IN EYE VIEW) */}
+            {isCinematicView && (
+                <button onClick={() => setIsCinematicView(false)} style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 100, background: 'rgba(0,0,0,0.8)', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', color: '#fff', fontWeight: 'bold', cursor: 'pointer', fontSize: '1rem' }}>
+                    EDIT ✏️
+                </button>
+            )}
 
             {!isCinematicView && (
                 <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -60,7 +81,6 @@ export default function SenderPage() {
                                         {selectedTiles.map((tile, idx) => (
                                             <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                                 <div style={{ display: 'flex', gap: '6px' }}>
-                                                    {/* LARGER LETTERS (85px) */}
                                                     <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', border: '2px solid #0070f3', transform: 'rotateY(20deg) skewY(-4deg)' }} alt="L" />
                                                     <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', border: '2px solid #0070f3', transform: 'rotateY(-20deg) skewY(4deg)' }} alt="R" />
                                                 </div>
@@ -72,10 +92,12 @@ export default function SenderPage() {
                             </div>
                         </div>
 
-                        <button onClick={handlePaymentAndSend} style={{ width: '450px', marginTop: '-45px', background: '#0070f3', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', zIndex: 30 }}>TRY TO CLICK ON SOME WORDS BELOW</button>
+                        {/* UPDATED INSTRUCTIONAL TEXT */}
+                        <button onClick={handlePaymentAndSend} style={{ width: '550px', marginTop: '-45px', background: '#0070f3', color: '#fff', padding: '12px 20px', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer', zIndex: 30, lineHeight: '1.2' }}>
+                            After you're done writing please click on the most important words to transform them into "vibes" (optional).
+                        </button>
 
                         <div style={{ width: '650px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                            {/* ALIGNED WRITING LINES AT 650PX */}
                             <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px 25px', borderRadius: '15px', border: '1px solid #0070f3', minHeight: '55px', width: '650px', boxSizing: 'border-box' }}>
                                 {tokens.map((t, i) => {
                                     const clean = t.trim().replace(/[.,!?;:]/g, "");
@@ -90,11 +112,12 @@ export default function SenderPage() {
                     <div style={{ position: 'absolute', right: '50px', top: '15%', display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
                         <div style={{ background: 'rgba(0,0,0,0.8)', padding: '20px', borderRadius: '35px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '2px solid #0070f3' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '65px', height: '65px', borderRadius: '18px', border: selectedScene.id === s.id ? '3px solid #fff' : '1px solid rgba(255,255,255,0.2)', background: selectedScene.id === s.id ? '#0070f3' : 'rgba(0,0,0,0.5)', color: '#fff' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '65px', height: '65px', borderRadius: '18px', border: selectedScene.id === s.id ? '3px solid #fff' : '1px solid rgba(255,255,255,0.2)', background: selectedScene.id === s.id ? '#0070f3' : 'rgba(0,0,0,0.5)', color: '#fff', cursor: 'pointer' }}>{s.label}</button>
                             ))}
                         </div>
                         <div style={{ display: 'flex', gap: '15px' }}>
-                            <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid #0070f3', borderRadius: '30px', padding: '15px 25px', cursor: 'pointer', fontSize: '2rem', color: '#fff', boxShadow: '0 0 15px gold' }}>👁️</button>
+                            {/* EYE BUTTON */}
+                            <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid #0070f3', borderRadius: '30px', padding: '15px 25px', cursor: 'pointer', fontSize: '2rem', color: '#fff', boxShadow: '0 0 15px rgba(0,112,243,0.5)' }}>👁️</button>
                             <button onClick={handlePaymentAndSend} style={{ background: '#000', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', cursor: 'pointer', fontSize: '1.1rem', color: '#fff', fontWeight: 'bold' }}>SEND (0.99¢)</button>
                         </div>
                     </div>
