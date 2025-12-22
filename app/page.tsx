@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
 const SCENES = [
@@ -14,18 +14,9 @@ export default function SenderPage() {
     const [selectedTiles, setSelectedTiles] = useState<string[]>([]);
     const [selectedScene, setSelectedScene] = useState(SCENES[0]);
     const [isCinematicView, setIsCinematicView] = useState(false);
-    const [isMuted, setIsMuted] = useState(true);
-    const videoRef = useRef<HTMLVideoElement>(null);
 
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
-
-    const toggleAudio = () => {
-        if (videoRef.current) {
-            videoRef.current.muted = !videoRef.current.muted;
-            setIsMuted(videoRef.current.muted);
-        }
-    };
 
     const toggleTile = (rawWord: string) => {
         const clean = rawWord.trim().replace(/[.,!?;:]/g, "");
@@ -47,69 +38,65 @@ export default function SenderPage() {
             if (session.error) { alert(`Stripe Error: ${session.error}`); return; }
             const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
             if (stripe) await stripe.redirectToCheckout({ sessionId: session.id });
-        } catch (err) { alert("Error connecting to Stripe."); }
+        } catch (err) { alert("Error connecting to Stripe. Check Vercel logs."); }
     };
 
     return (
         <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-            <video ref={videoRef} key={selectedScene.id} autoPlay loop playsInline muted={isMuted} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
+            <video key={selectedScene.id} autoPlay loop playsInline muted style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover' }}>
                 <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedScene.id}.mp4`} type="video/mp4" />
             </video>
 
-            <button onClick={toggleAudio} style={{ position: 'absolute', top: '20px', left: '20px', zIndex: 100, background: 'rgba(0,0,0,0.6)', border: '1px solid #0070f3', borderRadius: '50%', width: '44px', height: '44px', color: '#fff', cursor: 'pointer' }}>
-                {isMuted ? '🔇' : '🔊'}
-            </button>
-
             {!isCinematicView && (
-                <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '10px' }}>
-                    
-                    <div style={{ background: '#0070f3', color: '#fff', padding: '6px 20px', borderRadius: '50px', fontWeight: 'bold', marginBottom: '15px', fontSize: '0.8rem' }}>SEND A HEART IN A BOX</div>
-
-                    <div style={{ width: '95%', maxWidth: '450px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', height: '220px' }}>
-                        <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '65%', opacity: 0.7, position: 'absolute', top: '50%', transform: 'translateY(-50%)', zIndex: 5 }} alt="Box" />
+                <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         
-                        {selectedTiles.length > 0 && (
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '-6px', zIndex: 20, position: 'absolute', top: '50%', transform: 'translateY(-50%)' }}>
-                                {selectedTiles.map((tile, idx) => (
-                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '0 -2px' }}>
-                                        <div style={{ fontSize: '1.2rem', marginBottom: '-5px' }}>🎀</div>
-                                        <div style={{ 
-                                            display: 'flex', gap: '0px', 
-                                            transform: `perspective(500px) rotateY(${idx % 2 === 0 ? '25deg' : '-25deg'})`,
-                                            filter: 'drop-shadow(0 0 10px rgba(0, 112, 243, 0.9))'
-                                        }}>
-                                            <img src={getLetterUrl(tile.charAt(0))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} />
-                                            <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '60px', border: '1px solid #0070f3', borderRadius: '4px' }} />
-                                        </div>
-                                        <span style={{ background: 'rgba(0,0,0,0.8)', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', marginTop: '10px', padding: '3px 8px', borderRadius: '4px', textTransform: 'uppercase' }}>{tile}</span>
+                        <div style={{ position: 'relative', width: '450px', minHeight: '400px', background: 'rgba(0,0,0,0.5)', borderRadius: '25px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #0070f3', perspective: '1000px', marginBottom: '20px' }}>
+                            <button style={{ position: 'absolute', top: '-25px', width: '80%', background: '#0070f3', color: '#fff', padding: '10px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1rem' }}>SEND A HEART IN A BOX</button>
+                            <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
+                                <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '90%' }} alt="Box" />
+                                {selectedTiles.length > 0 && (
+                                    <div style={{ position: 'absolute', bottom: '85px', left: 0, right: 0, display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '12px' }}>
+                                        {selectedTiles.map((tile, idx) => (
+                                            <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                <div style={{ display: 'flex', gap: '6px' }}>
+                                                    {/* LARGER LETTERS (85px) */}
+                                                    <img src={getLetterUrl(tile.charAt(0))} style={{ width: '85px', border: '2px solid #0070f3', transform: 'rotateY(20deg) skewY(-4deg)' }} alt="L" />
+                                                    <img src={getLetterUrl(tile.charAt(tile.length - 1))} style={{ width: '85px', border: '2px solid #0070f3', transform: 'rotateY(-20deg) skewY(4deg)' }} alt="R" />
+                                                </div>
+                                                <span style={{ color: '#0070f3', fontSize: '1rem', fontWeight: 'bold', background: 'rgba(0,0,0,0.8)', padding: '2px 10px', borderRadius: '10px', marginTop: '8px' }}>{tile}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
+                                )}
                             </div>
-                        )}
-                    </div>
-
-                    <div style={{ width: '95%', maxWidth: '500px', marginTop: '10px' }}>
-                        <div style={{ color: '#fff', fontSize: '0.85rem', marginBottom: '8px', textShadow: '1px 1px 4px #000', textAlign: 'center' }}>Try to click on a few of your words below:</div>
-                        
-                        <div style={{ background: 'rgba(0,0,0,0.8)', color: '#fff', padding: '10px', borderRadius: '12px', border: '1px solid #333', marginBottom: '8px', minHeight: '35px', display: 'flex', flexWrap: 'wrap', gap: '5px', justifyContent: 'center' }}>
-                            {tokens.map((t, i) => {
-                                const clean = t.trim().replace(/[.,!?;:]/g, "");
-                                const isSel = selectedTiles.includes(clean);
-                                return <span key={i} onClick={() => toggleTile(t)} style={{ padding: '2px 6px', cursor: 'pointer', background: isSel ? '#0070f3' : 'rgba(255,255,255,0.1)', borderRadius: '4px' }}>{t}</span>
-                            })}
                         </div>
 
-                        <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message..." style={{ width: '100%', height: '60px', borderRadius: '12px', padding: '10px', background: '#111', border: '1px solid #0070f3', color: '#fff', fontSize: '1rem', resize: 'none' }} />
-                        <button onClick={handlePaymentAndSend} style={{ width: '100%', marginTop: '10px', background: '#0070f3', color: '#fff', padding: '14px', borderRadius: '50px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SEND (0.99¢)</button>
+                        <button onClick={handlePaymentAndSend} style={{ width: '450px', marginTop: '-45px', background: '#0070f3', color: '#fff', padding: '15px 0', borderRadius: '50px', border: 'none', fontWeight: 'bold', fontSize: '1.4rem', cursor: 'pointer', zIndex: 30 }}>TRY TO CLICK ON SOME WORDS BELOW</button>
+
+                        <div style={{ width: '650px', marginTop: '30px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                            {/* ALIGNED WRITING LINES AT 650PX */}
+                            <div style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', padding: '15px 25px', borderRadius: '15px', border: '1px solid #0070f3', minHeight: '55px', width: '650px', boxSizing: 'border-box' }}>
+                                {tokens.map((t, i) => {
+                                    const clean = t.trim().replace(/[.,!?;:]/g, "");
+                                    const isSel = selectedTiles.includes(clean);
+                                    return <span key={i} onClick={() => toggleTile(t)} style={{ padding: '2px 5px', borderRadius: '5px', cursor: 'pointer', background: isSel ? '#0070f3' : 'transparent' }}>{t}</span>
+                                })}
+                            </div>
+                            <textarea value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Type your message here..." style={{ width: '650px', height: '100px', borderRadius: '15px', padding: '15px 25px', border: '1px solid #0070f3', background: 'rgba(0,0,0,0.85)', color: '#fff', fontSize: '1.2rem', resize: 'none', boxSizing: 'border-box' }} />
+                        </div>
                     </div>
 
-                    <div style={{ marginTop: '15px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <div style={{ display: 'flex', gap: '6px' }}>
+                    <div style={{ position: 'absolute', right: '50px', top: '15%', display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}>
+                        <div style={{ background: 'rgba(0,0,0,0.8)', padding: '20px', borderRadius: '35px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '15px', border: '2px solid #0070f3' }}>
                             {SCENES.map((s) => (
-                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '36px', height: '36px', borderRadius: '10px', border: '1px solid #333', background: selectedScene.id === s.id ? '#0070f3' : '#111', color: '#fff', fontSize: '0.8rem' }}>{s.label}</button>
+                                <button key={s.id} onClick={() => setSelectedScene(s)} style={{ width: '65px', height: '65px', borderRadius: '18px', border: selectedScene.id === s.id ? '3px solid #fff' : '1px solid rgba(255,255,255,0.2)', background: selectedScene.id === s.id ? '#0070f3' : 'rgba(0,0,0,0.5)', color: '#fff' }}>{s.label}</button>
                             ))}
                         </div>
-                        <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.6)', border: '1px solid #0070f3', borderRadius: '50%', width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👁️</button>
+                        <div style={{ display: 'flex', gap: '15px' }}>
+                            <button onClick={() => setIsCinematicView(true)} style={{ background: 'rgba(0,0,0,0.8)', border: '2px solid #0070f3', borderRadius: '30px', padding: '15px 25px', cursor: 'pointer', fontSize: '2rem', color: '#fff', boxShadow: '0 0 15px gold' }}>👁️</button>
+                            <button onClick={handlePaymentAndSend} style={{ background: '#000', border: '2px solid #fff', borderRadius: '30px', padding: '10px 25px', cursor: 'pointer', fontSize: '1.1rem', color: '#fff', fontWeight: 'bold' }}>SEND (0.99¢)</button>
+                        </div>
                     </div>
                 </div>
             )}
