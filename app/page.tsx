@@ -19,12 +19,12 @@ export default function SenderPage() {
     const tokens = message.split(/(\s+)/);
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
-    // STRIPE PAYMENT LINK METHOD (No more build fails or processing errors)
+    // 💳 THE CLEAN PAYMENT DOORWAY (Does not touch sender logic)
     const handlePaymentAndSend = () => {
         if (!message.trim()) { alert("Please type a message first!"); return; }
-        // REPLACE THE URL BELOW WITH YOUR STRIPE PAYMENT LINK
-        const STRIPE_LINK = "https://buy.stripe.com/your_unique_link_here";
-        window.open(STRIPE_LINK, '_blank');
+        // REPLACE THIS with the "Payment Link" URL from your Stripe Dashboard
+        const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/your_unique_link";
+        window.open(STRIPE_PAYMENT_LINK, '_blank');
     };
 
     const toggleAudio = () => {
