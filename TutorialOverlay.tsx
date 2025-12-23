@@ -5,7 +5,7 @@ interface TutorialStep {
     title: string;
     description: string;
     position: { top?: string; bottom?: string; left?: string; right?: string };
-    highlightArea?: { top: string; left: string; width: string; height: string };
+    highlightArea?: { top?: string; bottom?: string; left?: string; right?: string; width: string; height: string };
     emoji: string;
 }
 
