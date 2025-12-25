@@ -2,6 +2,7 @@
 import React, { useState, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 
+// Scene selection
 const SCENES = [
     { id: 'one', label: '1' }, { id: 'two', label: '2' }, { id: 'three', label: '3' },
     { id: 'four', label: '4' }, { id: 'five', label: '5' }, { id: 'six', label: '6' },
