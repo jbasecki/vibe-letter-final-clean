@@ -5,15 +5,20 @@ import { Suspense } from 'react';
 function PreviewDisplay() {
     const searchParams = useSearchParams();
     const message = searchParams.get('message') || "Merry Christmas!";
-    const sceneId = searchParams.get('scene') || "1"; // Gets the number from the grid
+    const sceneId = searchParams.get('scene') || "1";
 
-    // Map your grid numbers to the actual filenames in your bucket
+    // Mapped to your actual bucket files
     const videoMap: { [key: string]: string } = {
-        "1": "eleven.mp4",      // Snowman & Kitten (current default)
-        "4": "four.mp4",        //
-        "5": "five.mp4",        //
-        "8": "eight.mp4",       //
-        "11": "eleven.mp4"      //
+        "1": "eleven.mp4",      // Snowman & Kitten
+        "2": "bigfeelings.mp4", // Scene 2
+        "3": "joy-of-winter.mp4",
+        "4": "four.mp4",
+        "5": "five.mp4",
+        "6": "daffodil-love.mp4",
+        "7": "giftofheart.mp4",
+        "8": "eight.mp4",       // Flying Saucer
+        "9": "happy-holidays.mp4",
+        "10": "happynewyear26.mp4"
     };
 
     const videoFile = videoMap[sceneId] || "eleven.mp4";
@@ -22,16 +27,12 @@ function PreviewDisplay() {
     return (
         <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
             <video
-                key={videoUrl} // Forces video to reload when scene changes
-                autoPlay
-                loop
-                muted
-                playsInline
+                key={videoUrl} // Crucial: reload video when selection changes
+                autoPlay loop muted playsInline
                 style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}
             >
                 <source src={videoUrl} type="video/mp4" />
             </video>
-
             <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '40px', textAlign: 'center' }}>
                 <h1 style={{ color: 'white', fontSize: '3.5rem', fontWeight: '300', textShadow: '0px 0px 30px rgba(0,0,0,0.9)', maxWidth: '900px', lineHeight: '1.2' }}>
                     {message}
