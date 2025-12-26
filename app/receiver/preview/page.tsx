@@ -24,13 +24,12 @@ function ReceiverContent() {
                     {tiles.map((tile, i) => (
                         <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <div style={{ display: 'flex', gap: '4px' }}>
-                                <img src={getLetterUrl(tile[0])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} />
-                                <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} />
+                                <img src={getLetterUrl(tile[0])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} alt="L" />
+                                <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} alt="R" />
                             </div>
-                            {/* THE TRANSLATION: Restoring the meditative link */}
                             <span style={{ marginTop: '10px', color: 'gold', fontSize: '0.9rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '2px', textShadow: '2px 2px 4px #000' }}>
                                 {tile}
-                            </label>
+                            </span>
                         </div>
                     ))}
                 </div>
