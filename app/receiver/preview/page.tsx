@@ -7,7 +7,7 @@ function ReceiverContent() {
     const message = searchParams.get('message') || "";
     const sceneId = searchParams.get('scene') || "eleven";
     const tiles = searchParams.get('tiles')?.split(',').filter(t => t) || [];
-    const dim = searchParams.get('dim') || "0.5";
+    const dim = searchParams.get('dim') || "0.6";
 
     const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
@@ -19,19 +19,23 @@ function ReceiverContent() {
 
             <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
                 
-                {/* THE MEDITATIVE REVEAL: Chosen Vibe Tiles */}
-                <div style={{ display: 'flex', gap: '15px', marginBottom: '40px' }}>
+                {/* MEDITATIVE TILES WITH TRANSLATIONS */}
+                <div style={{ display: 'flex', gap: '20px', marginBottom: '50px' }}>
                     {tiles.map((tile, i) => (
                         <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{ display: 'flex', gap: '3px' }}>
-                                <img src={getLetterUrl(tile[0])} style={{ width: '70px', border: '2px solid gold', borderRadius: '8px' }} />
-                                <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '70px', border: '2px solid gold', borderRadius: '8px' }} />
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <img src={getLetterUrl(tile[0])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} />
+                                <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '75px', border: '2px solid gold', borderRadius: '8px', boxShadow: '0 0 15px gold' }} />
                             </div>
+                            {/* THE TRANSLATION: Restoring the meditative link */}
+                            <span style={{ marginTop: '10px', color: 'gold', fontSize: '0.9rem', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '2px', textShadow: '2px 2px 4px #000' }}>
+                                {tile}
+                            </label>
                         </div>
                     ))}
                 </div>
 
-                <h1 style={{ color: 'white', fontSize: '3rem', fontWeight: '300', textShadow: '0 0 20px rgba(0,0,0,0.8)', maxWidth: '80%' }}>
+                <h1 style={{ color: 'white', fontSize: '3.2rem', fontWeight: '300', textShadow: '0 0 25px rgba(0,0,0,0.9)', maxWidth: '85%', lineHeight: '1.2' }}>
                     {message}
                 </h1>
             </div>
