@@ -2,39 +2,36 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
-function PreviewDisplay() {
+function ReceiverContent() {
     const searchParams = useSearchParams();
-    const message = searchParams.get('message') || "Merry Christmas!";
-    const sceneId = searchParams.get('scene') || "1";
+    const message = searchParams.get('message') || "";
+    const sceneId = searchParams.get('scene') || "eleven";
+    const tiles = searchParams.get('tiles')?.split(',').filter(t => t) || [];
+    const dim = searchParams.get('dim') || "0.5";
 
-    // Mapped to your actual bucket files
-    const videoMap: { [key: string]: string } = {
-        "1": "eleven.mp4",      // Snowman & Kitten
-        "2": "bigfeelings.mp4", // Scene 2
-        "3": "joy-of-winter.mp4",
-        "4": "four.mp4",
-        "5": "five.mp4",
-        "6": "daffodil-love.mp4",
-        "7": "giftofheart.mp4",
-        "8": "eight.mp4",       // Flying Saucer
-        "9": "happy-holidays.mp4",
-        "10": "happynewyear26.mp4"
-    };
-
-    const videoFile = videoMap[sceneId] || "eleven.mp4";
-    const videoUrl = `https://storage.googleapis.com/simple-bucket-27/${videoFile}`;
+    const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
     return (
         <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden', backgroundColor: '#000' }}>
-            <video
-                key={videoUrl} // Crucial: reload video when selection changes
-                autoPlay loop muted playsInline
-                style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }}
-            >
-                <source src={videoUrl} type="video/mp4" />
+            <video key={sceneId} autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: parseFloat(dim) }}>
+                <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
             </video>
-            <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '40px', textAlign: 'center' }}>
-                <h1 style={{ color: 'white', fontSize: '3.5rem', fontWeight: '300', textShadow: '0px 0px 30px rgba(0,0,0,0.9)', maxWidth: '900px', lineHeight: '1.2' }}>
+
+            <div style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', textAlign: 'center' }}>
+                
+                {/* THE MEDITATIVE REVEAL: Chosen Vibe Tiles */}
+                <div style={{ display: 'flex', gap: '15px', marginBottom: '40px' }}>
+                    {tiles.map((tile, i) => (
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', gap: '3px' }}>
+                                <img src={getLetterUrl(tile[0])} style={{ width: '70px', border: '2px solid gold', borderRadius: '8px' }} />
+                                <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '70px', border: '2px solid gold', borderRadius: '8px' }} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                <h1 style={{ color: 'white', fontSize: '3rem', fontWeight: '300', textShadow: '0 0 20px rgba(0,0,0,0.8)', maxWidth: '80%' }}>
                     {message}
                 </h1>
             </div>
@@ -42,10 +39,6 @@ function PreviewDisplay() {
     );
 }
 
-export default function ReceiverPreview() {
-    return (
-        <Suspense fallback={<div style={{color: 'white', padding: '20px'}}>Loading your choice...</div>}>
-            <PreviewDisplay />
-        </Suspense>
-    );
+export default function ReceiverPreviewPage() {
+    return <Suspense><ReceiverContent /></Suspense>;
 }
