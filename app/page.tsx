@@ -2,10 +2,10 @@
 import React, { useState, useRef } from 'react';
 
 const CLEAN_SCENES = [
-    { id: 'eleven', label: '1' }, { id: 'four', label: '4' }, { id: 'five', label: '5' }, { id: 'eight', label: '8' }, { id: 'joy-of-winter', label: '11' }
+    { id: 'one', label: '1' }, { id: 'four', label: '4' }, { id: 'five', label: '5' }, { id: 'eight', label: '8' }, { id: 'eleven', label: '11' }
 ];
 const ART_SCENES = [
-    { id: 'bigfeelings', label: '2' }, { id: 'daffodil-love', label: '6' }, { id: 'giftofheart', label: '7' }, { id: 'happy-holidays', label: '9' }, { id: 'happynewyear26', label: '10' }
+    { id: 'two', label: '2' }, { id: 'six', label: '6' }, { id: 'seven', label: '7' }, { id: 'nine', label: '9' }, { id: 'ten', label: '10' }
 ];
 
 export default function MasterSenderPage() {
