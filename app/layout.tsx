@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     title: 'You have a message in the Vault 🔐',
     description: 'A meditative New Year greeting is waiting for you. Tap to unfold.',
     url: 'https://vibe-letter-final-clean.vercel.app',
-    siteName: 'THE VIBE GAMES',
+    siteName: 'THE VIBE GAMES | 2026 New Year Vault',
     images: [
       {
         url: 'https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png', 
