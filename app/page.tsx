@@ -27,7 +27,13 @@ export default function Home() {
         <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px' }}>GRID I: THE CLEARING</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '20px' }}>
           {grid1.map((num) => (
-            <button key={num} onMouseEnter={() => setSelectedVideo(num)} style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}>{num}</button>
+            <button 
+              key={num} 
+              onMouseEnter={() => setSelectedVideo(num)} 
+              style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}
+            >
+              {num}
+            </button>
           ))}
         </div>
 
@@ -35,13 +41,19 @@ export default function Home() {
         <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px' }}>GRID II: THE AWAKENING</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '30px' }}>
           {grid2.map((num) => (
-            <button key={num} onMouseEnter={() => setSelectedVideo(num)} style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}>{num}</button>
+            <button 
+              key={num} 
+              onMouseEnter={() => setSelectedVideo(num)} 
+              style={{ width: '40px', height: '40px', borderRadius: '5px', border: '1px solid rgba(255,255,255,0.3)', background: selectedVideo === num ? 'gold' : 'rgba(255,255,255,0.1)', color: selectedVideo === num ? 'black' : 'white', cursor: 'pointer' }}
+            >
+              {num}
+            </button>
           ))}
         </div>
 
-        {/* THE "SEND" BUTTON POINTING TO YOUR NEW 004 LINK */}
+        {/* THE "SEND" BUTTON - USE THE REDIRECT-ENABLED LINK FROM YOUR DASHBOARD */}
         <button 
-          onClick={() => window.location.href = 'https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
+          onClick={() => window.location.href = 'https://buy.stripe.com/4gM14obTmgNT9ED2N8fn003'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
         >
           SEND VIBE {selectedVideo} ($0.99)
