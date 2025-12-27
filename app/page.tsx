@@ -41,7 +41,7 @@ export default function Home() {
 
         {/* THE "SEND" BUTTON POINTING TO YOUR NEW 004 LINK */}
         <button 
-          onClick={() => window.location.href = 'https://buy.stripe.com/4gM14obTmgNT9ED2N8fn004'} 
+          onClick={() => window.location.href = 'https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
         >
           SEND VIBE {selectedVideo} ($0.99)
