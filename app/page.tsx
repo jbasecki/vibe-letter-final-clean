@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
       
-      {/* LIVE BACKGROUND PREVIEW */}
+      {/* BACKGROUND PREVIEW */}
       <video
         key={selectedVideo}
         autoPlay loop muted playsInline
@@ -51,9 +51,9 @@ export default function Home() {
           ))}
         </div>
 
-        {/* THE "SEND" BUTTON - UPDATED TO YOUR 005 LINK */}
+        {/* THE "SEND" BUTTON - PASTE YOUR REAL STRIPE LINK BELOW */}
         <button 
-          onClick={() => window.location.href = 'https://buy.stripe.com/4gM14obTmgNT9ED2N8fn005'} 
+          onClick={() => window.location.href = 'PASTE_YOUR_COPIED_STRIPE_LINK_HERE'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
         >
           SEND VIBE {selectedVideo} ($0.99)
