@@ -59,7 +59,7 @@ export default function HomePage() {
                         ))}
                     </div>
                 </div>
-
+// Launch Version 1.1
                 {/* THE "SEND" BUTTON */}
                 <button 
                     onClick={() => window.location.href = 'https://buy.stripe.com/4gM14obTmgNT9ED2N8fnO03'} 
