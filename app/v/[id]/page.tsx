@@ -1,23 +1,22 @@
-'use client';
-import React, { useState } from 'react';
-
-export default function ReceiverPage() {
-    const [isUnfolded, setIsUnfolded] = useState(false);
-
-    return (
-        <main style={{ height: '100vh', width: '100vw', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-            {!isUnfolded ? (
-                <div onClick={() => setIsUnfolded(true)} style={{ cursor: 'pointer' }}>
-                    <img 
-                        src="https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png" 
-                        style={{ width: '250px', borderRadius: '20px', boxShadow: '0 0 30px gold' }} 
-                        alt="Gold Vault" 
-                    />
-                    <h2 style={{ color: 'gold', marginTop: '20px', fontFamily: 'sans-serif' }}>TAP TO UNFOLD</h2>
-                </div>
-            ) : (
-                <h1 style={{ color: 'white', fontFamily: 'sans-serif' }}>Your Vibe has Unfolded.</h1>
-            )}
-        </main>
-    );
-}
+// Inside the 'isUnfolded' true section:
+<div style={{ textAlign: 'center' }}>
+    <h1 style={{ color: 'white' }}>Your Vibe has Unfolded.</h1>
+    <p style={{ color: 'gold' }}>Feeling the peace? Keep the energy moving.</p>
+    
+    {/* THE INCENTIVE BUTTON */}
+    <button 
+        onClick={() => window.location.href = '/'} 
+        style={{ 
+            marginTop: '20px', 
+            background: 'gold', 
+            color: 'black', 
+            padding: '15px 30px', 
+            borderRadius: '30px', 
+            fontWeight: 'bold', 
+            cursor: 'pointer',
+            border: 'none' 
+        }}
+    >
+        SEND A VIBE BACK
+    </button>
+</div>
