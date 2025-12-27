@@ -13,10 +13,10 @@ export default function ReceiverPage() {
                         style={{ width: '250px', borderRadius: '20px', boxShadow: '0 0 30px gold' }} 
                         alt="Gold Vault" 
                     />
-                    <h2 style={{ color: 'gold', marginTop: '20px' }}>TAP TO UNFOLD</h2>
+                    <h2 style={{ color: 'gold', marginTop: '20px', fontFamily: 'sans-serif' }}>TAP TO UNFOLD</h2>
                 </div>
             ) : (
-                <h1 style={{ color: 'white' }}>Your Vibe has Unfolded.</h1>
+                <h1 style={{ color: 'white', fontFamily: 'sans-serif' }}>Your Vibe has Unfolded.</h1>
             )}
         </main>
     );
