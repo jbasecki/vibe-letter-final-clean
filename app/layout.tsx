@@ -3,24 +3,31 @@ import type { Metadata } from 'next'
 // We removed the globals.css line to fix the "Module not found" error
 
 export const metadata: Metadata = {
-  title: 'A Digital Hug | Special Vibe Greeting',
-  description: 'Someone sent you a secret winter vibe! Tap to unwrap your message.',
+  title: 'THE VIBE GAMES | 2026 New Year Vault',
+  description: 'Someone stashed a message for you. Tap to unfold your 2026 Vibe.',
   openGraph: {
-    title: 'A Digital Hug 🎉',
-    description: 'You have a secret winter message waiting...',
+    title: 'You have a message in the Vault 🔐',
+    description: 'A meditative New Year greeting is waiting for you. Tap to unfold.',
     url: 'https://vibe-letter-final-clean.vercel.app',
-    siteName: 'Vibe Greeting Shop',
+    siteName: 'THE VIBE GAMES',
     images: [
       {
-        url: 'https://storage.googleapis.com/simple-bucket-27/A.png', 
-        width: 800,
-        height: 600,
+        url: 'https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png', 
+        width: 1200,
+        height: 630,
+        alt: 'The Vibe Gold Vault',
       },
     ],
     locale: 'en_US',
     type: 'website',
   },
-}
+  twitter: {
+    card: 'summary_large_image',
+    title: 'A Vibe is waiting for you',
+    description: 'Tap to unfold your meditative New Year stash.',
+    images: ['https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png'],
+  },
+};
 
 export default function RootLayout({
   children,
