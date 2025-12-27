@@ -53,7 +53,7 @@ export default function Home() {
 
         {/* THE "SEND" BUTTON - USE THE REDIRECT-ENABLED LINK FROM YOUR DASHBOARD */}
         <button 
-          onClick={() => window.location.href = 'hhttps://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
+          onClick={() => window.location.href = 'https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
         >
           SEND VIBE {selectedVideo} ($0.99)
