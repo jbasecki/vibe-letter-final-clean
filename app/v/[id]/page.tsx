@@ -5,13 +5,13 @@ export default function ReceiverPage() {
     const [isUnfolded, setIsUnfolded] = useState(false);
 
     return (
-        <main style={{ height: '100vh', width: '100vw', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <main style={{ height: '100vh', width: '100vw', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
             {!isUnfolded ? (
-                <div onClick={() => setIsUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center' }}>
+                <div onClick={() => setIsUnfolded(true)} style={{ cursor: 'pointer' }}>
                     <img 
                         src="https://storage.googleapis.com/simple-bucket-27/gold-vault-final.png" 
-                        style={{ width: '250px', borderRadius: '20px' }} 
-                        alt="Vault" 
+                        style={{ width: '250px', borderRadius: '20px', boxShadow: '0 0 30px gold' }} 
+                        alt="Gold Vault" 
                     />
                     <h2 style={{ color: 'gold', marginTop: '20px' }}>TAP TO UNFOLD</h2>
                 </div>
