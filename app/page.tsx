@@ -39,7 +39,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* THE "SEND" BUTTON - https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05*/}
+        {/* THE "SEND" BUTTON -*/}
         <button 
           onClick={() => window.location.href = 'https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
