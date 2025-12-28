@@ -17,50 +17,78 @@ function OpenContent() {
 
   useEffect(() => {
     if (unfolded) {
-      const timer = setTimeout(() => setShowProse(true), 3000);
+      // Allows the receiver to absorb the Golden Vibes before the prose appears
+      const timer = setTimeout(() => setShowProse(true), 3500);
       return () => clearTimeout(timer);
     }
   }, [unfolded]);
 
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden', fontFamily: 'sans-serif' }}>
-      <video key={sceneId} autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.5 : 0.2, transition: 'opacity 2s' }}>
+      
+      {/* CINEMATIC BACKGROUND */}
+      <video key={sceneId} autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.55 : 0.25, transition: 'opacity 2.5s ease-in-out' }}>
         <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
       </video>
 
       <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        
         {!unfolded ? (
-          <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center', border: '2px solid gold', padding: '50px', borderRadius: '35px', background: 'rgba(50,0,0,0.6)', boxShadow: '0 0 40px gold' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '10px' }}>🏺</div>
-            <p style={{ color: 'gold', marginTop: '10px', letterSpacing: '4px', fontSize: '0.8rem', fontWeight: 'bold' }}>OPEN STASHED MESSAGE</p>
+          /* THE GLOWING GOLDEN ORB (Replaces Blue Box & Emoji Square) */
+          <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center' }}>
+            <div style={{ 
+              width: '120px', height: '120px', 
+              background: 'radial-gradient(circle, #fff7ad 0%, #ffa700 70%)', 
+              borderRadius: '50%', margin: '0 auto 30px',
+              boxShadow: '0 0 60px #ffa700, 0 0 120px rgba(255,165,0,0.5)',
+              border: '2px solid white',
+              animation: 'pulseGlow 3s infinite ease-in-out'
+            }} />
+            <p style={{ color: 'gold', letterSpacing: '8px', fontSize: '0.85rem', fontWeight: 'bold', textShadow: '2px 2px 5px black' }}>
+              OPEN STASHED MESSAGE
+            </p>
           </div>
         ) : (
-          <div style={{ width: '95%', maxWidth: '1000px', textAlign: 'center' }}>
-            {/* HORIZONTAL VIBE ROW */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '25px', marginBottom: '50px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '20px' }}>
+          <div style={{ width: '95%', maxWidth: '1200px', textAlign: 'center' }}>
+            
+            {/* HORIZONTAL VIBE ROW (CLEAN) */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '35px', marginBottom: '80px', flexWrap: 'nowrap', overflowX: 'auto', padding: '20px' }}>
               {selectedTiles.map((tile, idx) => (
-                <div key={idx} style={{ flex: '0 0 auto', textAlign: 'center' }}>
-                  <div style={{ display: 'flex', gap: '4px', border: '1.5px solid gold', padding: '8px', borderRadius: '12px', background: 'rgba(0,0,0,0.8)', boxShadow: '0 0 25px rgba(255,215,0,0.4)' }}>
-                    <img src={getLetterUrl(tile[0])} style={{ width: '60px' }} />
-                    <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '60px' }} />
+                <div key={idx} style={{ flex: '0 0 auto', textAlign: 'center', animation: 'tileAppear 1.5s ease-out forwards' }}>
+                  <div style={{ display: 'flex', gap: '5px', border: '1.5px solid #FFD700', padding: '12px', borderRadius: '18px', background: 'rgba(0,0,0,0.85)', boxShadow: '0 0 40px rgba(255,215,0,0.5)' }}>
+                    <img src={getLetterUrl(tile[0])} style={{ width: '75px', height: 'auto' }} alt="vibe-start" />
+                    <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '75px', height: 'auto' }} alt="vibe-end" />
                   </div>
-                  <p style={{ color: 'gold', fontSize: '0.75rem', marginTop: '15px', fontWeight: '900', letterSpacing: '3px', textShadow: '0 0 10px black' }}>{tile.toUpperCase()}</p>
+                  {/* SIGNED TRANSLATION BENEATH */}
+                  <p style={{ color: '#FFD700', fontSize: '0.95rem', marginTop: '25px', fontWeight: '900', letterSpacing: '5px', textShadow: '2px 2px 6px black' }}>{tile.toUpperCase()}</p>
                 </div>
               ))}
             </div>
             
-            <div style={{ opacity: showProse ? 1 : 0, transition: 'opacity 2s', background: 'rgba(30,0,0,0.85)', padding: '40px', borderRadius: '30px', border: '1px solid gold' }}>
-              <p style={{ color: 'white', fontSize: '1.4rem', lineHeight: '1.6', marginBottom: '25px' }}>{message}</p>
-              <p style={{ color: 'gold', fontSize: '0.8rem', letterSpacing: '2px' }}>— {from.toUpperCase()}</p>
-              <button onClick={() => window.location.href='/?reply=true'} style={{ marginTop: '30px', background: 'gold', color: 'black', padding: '12px 30px', borderRadius: '25px', cursor: 'pointer', border: 'none', fontWeight: 'bold' }}>REPLY FOR FREE</button>
+            {/* WARM PROSE REVEAL */}
+            <div style={{ opacity: showProse ? 1 : 0, transform: showProse ? 'translateY(0)' : 'translateY(30px)', transition: 'opacity 2.5s ease, transform 2.5s ease', background: 'rgba(30,0,0,0.92)', padding: '55px', borderRadius: '45px', border: '1.5px solid gold', boxShadow: '0 0 40px rgba(218,165,32,0.3)' }}>
+              <p style={{ color: 'white', fontSize: '1.7rem', lineHeight: '1.8', marginBottom: '35px', fontWeight: '200', letterSpacing: '0.8px' }}>{message}</p>
+              <p style={{ color: 'gold', fontSize: '1rem', letterSpacing: '4px', opacity: 0.8 }}>— {from.toUpperCase()}</p>
+              <button onClick={() => window.location.href='/?reply=true'} style={{ marginTop: '45px', background: 'linear-gradient(135deg, #FFD700 0%, #B8860B 100%)', color: 'black', padding: '16px 50px', borderRadius: '40px', cursor: 'pointer', border: 'none', fontWeight: 'bold', fontSize: '1rem', boxShadow: '0 8px 20px rgba(0,0,0,0.5)' }}>REPLY FOR FREE</button>
             </div>
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes pulseGlow {
+          0%, 100% { transform: scale(1); opacity: 0.8; }
+          50% { transform: scale(1.05); opacity: 1; }
+        }
+        @keyframes tileAppear {
+          from { opacity: 0; transform: translateY(20px) scale(0.9); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
     </main>
   );
 }
 
 export default function OpenPage() {
-  return <Suspense><OpenContent /></Suspense>;
+  return <Suspense fallback={<div style={{color: 'gold', background: '#000', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', letterSpacing: '5px'}}>PREPARING THE REVEAL...</div>}><OpenContent /></Suspense>;
 }
