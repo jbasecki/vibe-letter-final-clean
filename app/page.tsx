@@ -39,9 +39,9 @@ export default function Home() {
           ))}
         </div>
 
-        {/* THE "SEND" BUTTON -*/}
+        {/* THE "SEND" BUTTON - PASTE YOUR STRIPE LINK BETWEEN THE QUOTES BELOW */}
         <button 
-          onClick={() => window.location.href = 'https://buy.stripe.com/9B628saPibtz6sr4VgfnO06'} 
+          onClick={() => window.location.href = 'https://buy.stripe.com/aFa8wQ2iM1SZ7wv73ofnO07'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
         >
           SEND VIBE {selectedVideo} ($0.99)
