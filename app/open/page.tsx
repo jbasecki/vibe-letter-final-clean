@@ -45,12 +45,12 @@ function HarmonicaContent() {
                 <p style={{ color: 'white', fontSize: '0.9rem', marginBottom: '15px', fontStyle: 'italic' }}>Want to send the energy back?</p>
                 
                 {/* THE FREE REPLY PROMPT */}
-                <button 
-                  onClick={() => window.location.href = '/'}
-                  style={{ background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '20px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
-                >
-                  REPLY FOR FREE
-                </button>
+               <button 
+  onClick={() => window.location.href = '/?reply=true'}
+  style={{ background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '20px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
+>
+  REPLY FOR FREE
+</button>
               </div>
             </>
           )}
