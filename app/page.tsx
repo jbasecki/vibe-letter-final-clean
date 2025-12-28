@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
       
-      {/* BACKGROUND PREVIEW */}
+      {/* BACKGROUND VIDEO PREVIEW */}
       <video
         key={selectedVideo}
         autoPlay loop muted playsInline
@@ -18,12 +18,12 @@ export default function Home() {
         <source src={`https://storage.googleapis.com/simple-bucket-27/${selectedVideo}.mp4`} type="video/mp4" />
       </video>
 
-      {/* INTERFACE OVERLAY */}
+      {/* UI OVERLAY */}
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'white', background: 'rgba(0,0,0,0.3)', textAlign: 'center' }}>
         <h1 style={{ fontSize: '2.5rem', marginBottom: '5px', letterSpacing: '2px' }}>STASH A VIBE</h1>
         <p style={{ color: 'gold', fontSize: '0.9rem', marginBottom: '30px' }}>New Year. New Energy. 2026.</p>
 
-        {/* GRID I */}
+        {/* GRID I: THE CLEARING */}
         <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px' }}>GRID I: THE CLEARING</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '20px' }}>
           {grid1.map((num) => (
@@ -37,7 +37,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* GRID II */}
+        {/* GRID II: THE AWAKENING */}
         <p style={{ fontSize: '0.7rem', opacity: 0.6, marginBottom: '10px' }}>GRID II: THE AWAKENING</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '10px', marginBottom: '30px' }}>
           {grid2.map((num) => (
@@ -51,7 +51,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* THE "SEND" BUTTON - PASTE YOUR REAL STRIPE LINK BELOW */}
+        {/*https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05*/}
         <button 
           onClick={() => window.location.href = 'https://buy.stripe.com/dRm3cw1eIcxD8Az73ofnO05'} 
           style={{ background: 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontSize: '1.1rem', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
