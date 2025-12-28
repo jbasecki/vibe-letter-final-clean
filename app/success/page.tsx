@@ -12,12 +12,14 @@ function SuccessContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    // This creates the link combining Video ID + Two Lines of text
     const harmonicaLink = `${baseUrl}/open?vibe=${vibeId}&l1=${encodeURIComponent(line1)}&l2=${encodeURIComponent(line2)}`;
     
+    // Copies the link for your records
     navigator.clipboard.writeText(harmonicaLink);
     setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+
+    // IMMEDIATELY OPENS THE GIFT SO YOU SEE IT UNFOLD
+    window.open(harmonicaLink, '_blank');
   };
 
   return (
@@ -41,7 +43,7 @@ function SuccessContent() {
         onClick={handleStashAndCopy}
         style={{ background: copied ? '#4CAF50' : 'gold', color: 'black', padding: '15px 40px', borderRadius: '30px', fontWeight: 'bold', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px gold' }}
       >
-        {copied ? 'LINK COPIED!' : 'STASH & COPY LINK'}
+        {copied ? 'LINK COPIED & OPENED!' : 'STASH & OPEN GIFT'}
       </button>
     </div>
   );
