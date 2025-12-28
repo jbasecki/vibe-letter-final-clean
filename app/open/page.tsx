@@ -2,7 +2,7 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-function HarmonicaContent() {
+function OpenContent() {
   const searchParams = useSearchParams();
   const [unfolded, setUnfolded] = useState(false);
   const [showText, setShowText] = useState(false);
@@ -31,13 +31,11 @@ function HarmonicaContent() {
       <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         
         {!unfolded ? (
-          // THE BRAND IMAGE: THE BLUE BOX
           <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', textAlign: 'center', animation: 'float 3s ease-in-out infinite' }}>
             <img src="https://storage.googleapis.com/simple-bucket-27/blue-box.png" style={{ width: '200px', filter: 'drop-shadow(0 0 30px #0070f3)' }} />
-            <p style={{ color: 'gold', marginTop: '20px', letterSpacing: '4px', fontSize: '0.8rem' }}>CLICK TO OPEN HARMONICA</p>
+            <p style={{ color: 'gold', marginTop: '20px', letterSpacing: '4px', fontSize: '0.8rem' }}>OPEN THE STASHED MESSAGE</p>
           </div>
         ) : (
-          // THE ENCHANTED REVEAL
           <div style={{ width: '90%', maxWidth: '800px', textAlign: 'center' }}>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '40px', animation: 'fadeIn 2s' }}>
               {selectedTiles.map((tile, idx) => (
@@ -49,9 +47,9 @@ function HarmonicaContent() {
             </div>
             
             <div style={{ opacity: showText ? 1 : 0, transition: 'opacity 2s', background: 'rgba(0,0,0,0.7)', padding: '40px', borderRadius: '30px', border: '1px solid gold' }}>
-              <p style={{ color: 'white', fontSize: '1.4rem', lineHeight: '1.6', marginBottom: '20px' }}>{message}</p>
-              <p style={{ color: 'gold', fontSize: '0.9rem' }}>— {from}</p>
-              <button onClick={() => window.location.href='/?reply=true'} style={{ marginTop: '30px', background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '20px', cursor: 'pointer' }}>REPLY FOR FREE</button>
+              <p style={{ color: 'white', fontSize: '1.4rem', lineHeight: '1.6', marginBottom: '20px', fontWeight: 'lighter' }}>{message}</p>
+              <p style={{ color: 'gold', fontSize: '0.9rem', letterSpacing: '2px' }}>— {from.toUpperCase()}</p>
+              <button onClick={() => window.location.href='/?reply=true'} style={{ marginTop: '30px', background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', fontSize: '0.7rem' }}>REPLY FOR FREE</button>
             </div>
           </div>
         )}
@@ -66,5 +64,5 @@ function HarmonicaContent() {
 }
 
 export default function OpenPage() {
-  return <Suspense><HarmonicaContent /></Suspense>;
+  return <Suspense><OpenContent /></Suspense>;
 }
