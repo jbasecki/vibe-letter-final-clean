@@ -1,58 +1,59 @@
 'use client';
-import React, { Suspense, useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
 
-function OpenContent() {
-  const searchParams = useSearchParams();
-  const [unfolded, setUnfolded] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  
-  const message = searchParams.get('msg') || "";
-  const sceneId = searchParams.get('vibe') || '14';
-  const tilesStr = searchParams.get('tiles') || "";
-  const from = searchParams.get('from') || 'A Friend';
-  const selectedTiles = tilesStr ? tilesStr.split(',').filter(t => t.trim()) : [];
+export default function ReceiverPage() {
+  const [isRevealed, setIsRevealed] = useState(false);
 
-  const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
+  // Example data that would be fetched from your database
+  const stashedWords = ["HAPPY", "SUNNY", "MONDAY"]; 
+  const senderSignature = "Mom";
 
   return (
-    <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
-      <video key={sceneId} autoPlay loop muted={isMuted} playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.5 : 0.3 }}>
-        <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
-      </video>
+    <main style={{ minHeight: '100vh', background: '#000', color: 'gold', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      
+      {/* THE HEADER: REFINED AND PROFESSIONAL */}
+      <h2 style={{ letterSpacing: '6px', fontSize: '1rem', marginBottom: '50px', opacity: isRevealed ? 1 : 0, transition: 'opacity 2s' }}>
+        A HARMONICA COMPOSED OF MEANINGFUL WORDS
+      </h2>
 
-      <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        {!unfolded ? (
-          <div style={{ textAlign: 'center' }}>
-            {/* THE GOLDEN ORB (Goal 2) */}
-            <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', width: '130px', height: '130px', background: 'radial-gradient(circle, #fff7ad 0%, #ffa700 70%)', borderRadius: '50%', margin: '0 auto 30px', boxShadow: '0 0 60px #ffa700', border: '2px solid white', animation: 'pulse 3s infinite' }} />
-            <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'none', border: '1.5px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '25px', cursor: 'pointer', fontSize: '0.8rem' }}>
-               {isMuted ? 'UNMUTE AUDIO' : 'AUDIO ON'}
-            </button>
+      {/* THE GOLDEN ORB (Click to Unfold) */}
+      {!isRevealed ? (
+        <div 
+          onClick={() => setIsRevealed(true)}
+          style={{ width: '150px', height: '150px', borderRadius: '50%', background: 'radial-gradient(circle, #FFD700 0%, #B8860B 100%)', boxShadow: '0 0 50px gold', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          <p style={{ color: 'black', fontWeight: 'bold', letterSpacing: '2px' }}>UNFOLD</p>
+        </div>
+      ) : (
+        /* THE REVEALED HARMONICA */
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'fadeIn 2s ease-in' }}>
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '40px' }}>
+            {stashedWords.map((word, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ 
+                  width: '80px', height: '120px', border: '1px solid gold', borderRadius: '12px',
+                  backgroundImage: `url(https://storage.googleapis.com/simple-bucket-27/vibes/${word[0].toLowerCase()}.png)`,
+                  backgroundSize: 'cover', backgroundPosition: 'center'
+                }} />
+                <p style={{ fontSize: '0.7rem', marginTop: '10px', letterSpacing: '3px' }}>{word.toUpperCase()}</p>
+              </div>
+            ))}
           </div>
-        ) : (
-          <div style={{ width: '95%', textAlign: 'center' }}>
-            <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>HARMONICA MADE OF WORDS OF MEANING</h2>
-            {/* HORIZONTAL TILES (Goal 6, 9) */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px', flexWrap: 'nowrap', overflowX: 'auto' }}>
-              {selectedTiles.map((tile, idx) => (
-                <div key={idx} style={{ flex: '0 0 auto' }}>
-                  <div style={{ display: 'flex', gap: '4px', border: '1.5px solid gold', padding: '8px', borderRadius: '12px', background: 'rgba(0,0,0,0.8)' }}>
-                    <img src={getLetterUrl(tile[0])} style={{ width: '60px' }} />
-                    <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '60px' }} />
-                  </div>
-                  <p style={{ color: 'gold', fontSize: '0.7rem', marginTop: '10px', fontWeight: 'bold' }}>{tile.toUpperCase()}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{ background: 'rgba(30,0,0,0.9)', padding: '40px', borderRadius: '30px', border: '1px solid gold' }}>
-              <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
-              <p style={{ color: 'gold', marginTop: '20px' }}>— {from.toUpperCase()}</p>
-            </div>
+
+          {/* THE GOLDEN CURSIVE SIGNATURE */}
+          <div style={{ marginTop: '40px', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.8rem', opacity: 0.6, letterSpacing: '2px' }}>signed,</p>
+            <p style={{ 
+              fontFamily: "'Dancing Script', cursive", 
+              fontSize: '2.5rem', 
+              color: '#FFD700', 
+              textShadow: '0 0 10px rgba(255, 215, 0, 0.4)' 
+            }}>
+              {senderSignature}
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </main>
   );
 }
-export default function OpenPage() { return <Suspense><OpenContent /></Suspense>; }
