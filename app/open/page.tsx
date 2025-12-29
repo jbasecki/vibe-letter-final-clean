@@ -2,72 +2,57 @@
 import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-function HarmonicaContent() {
+function OpenContent() {
   const searchParams = useSearchParams();
   const [unfolded, setUnfolded] = useState(false);
-  const [showReply, setShowReply] = useState(false); // New state to hide the button initially
+  const [isMuted, setIsMuted] = useState(true);
   
-  const line1 = searchParams.get('l1') || '';
-  const line2 = searchParams.get('l2') || '';
-  const from = searchParams.get('from') || 'A FRIEND'; 
-  const vibeId = searchParams.get('vibe') || '14'; 
+  const message = searchParams.get('msg') || "";
+  const sceneId = searchParams.get('vibe') || '14';
+  const tilesStr = searchParams.get('tiles') || "";
+  const from = searchParams.get('from') || 'A Friend';
+  const selectedTiles = tilesStr ? tilesStr.split(',').filter(t => t.trim()) : [];
 
-  // When the user unfolds, wait 3 seconds before showing the reply prompt
-  useEffect(() => {
-    if (unfolded) {
-      const timer = setTimeout(() => setShowReply(true), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [unfolded]);
+  const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
 
   return (
-    <main style={{ position: 'relative', height: '100vh', width: '100vw', overflow: 'hidden', background: '#000', fontFamily: 'sans-serif' }}>
-      <video autoPlay loop muted playsInline style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }}>
-        <source src={`https://storage.googleapis.com/simple-bucket-27/${vibeId}.mp4`} type="video/mp4" />
+    <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
+      <video key={sceneId} autoPlay loop muted={isMuted} playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.5 : 0.3 }}>
+        <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
       </video>
 
-      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'rgba(0,0,0,0.3)' }}>
-        <div 
-          onClick={() => !unfolded && setUnfolded(true)}
-          style={{ 
-            border: '2px solid gold', padding: '40px', borderRadius: '20px', 
-            background: 'rgba(0,0,0,0.85)', textAlign: 'center', 
-            cursor: unfolded ? 'default' : 'pointer',
-            boxShadow: unfolded ? '0 0 50px gold' : '0 0 20px gold',
-            transition: 'all 0.8s ease', maxWidth: '450px', width: '90%'
-          }}
-        >
-          {!unfolded ? (
-            <h2 style={{ color: 'gold', fontSize: '1.2rem', letterSpacing: '4px' }}>CLICK TO UNFOLD</h2>
-          ) : (
-            <>
-              <p style={{ color: 'gold', fontSize: '0.7rem', letterSpacing: '2px', marginBottom: '20px' }}>STASHED BY {from}</p>
-              
-              <p style={{ color: 'white', fontSize: '2.2rem', fontWeight: 'bold', textTransform: 'uppercase', margin: '5px 0' }}>{line1}</p>
-              <p style={{ color: 'white', fontSize: '2.2rem', fontWeight: 'bold', textTransform: 'uppercase', margin: '5px 0' }}>{line2}</p>
-              
-              {/* ONLY SHOWS AFTER 3 SECONDS OF READING */}
-              <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,215,0,0.3)', opacity: showReply ? 1 : 0, transition: 'opacity 1s ease' }}>
-                <p style={{ color: 'white', fontSize: '0.8rem', marginBottom: '15px', opacity: 0.7 }}>Want to send the energy back?</p>
-                <button 
-                  onClick={() => window.location.href = '/?reply=true'}
-                  style={{ background: 'none', border: '1px solid gold', color: 'gold', padding: '10px 25px', borderRadius: '20px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 'bold' }}
-                >
-                  REPLY FOR FREE
-                </button>
-              </div>
-            </>
-          )}
-        </div>
+      <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        {!unfolded ? (
+          <div style={{ textAlign: 'center' }}>
+            {/* THE GOLDEN ORB (Goal 2) */}
+            <div onClick={() => setUnfolded(true)} style={{ cursor: 'pointer', width: '130px', height: '130px', background: 'radial-gradient(circle, #fff7ad 0%, #ffa700 70%)', borderRadius: '50%', margin: '0 auto 30px', boxShadow: '0 0 60px #ffa700', border: '2px solid white', animation: 'pulse 3s infinite' }} />
+            <button onClick={() => setIsMuted(!isMuted)} style={{ background: 'none', border: '1.5px solid gold', color: 'gold', padding: '10px 20px', borderRadius: '25px', cursor: 'pointer', fontSize: '0.8rem' }}>
+               {isMuted ? 'UNMUTE AUDIO' : 'AUDIO ON'}
+            </button>
+          </div>
+        ) : (
+          <div style={{ width: '95%', textAlign: 'center' }}>
+            <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>HARMONICA MADE OF WORDS OF MEANING</h2>
+            {/* HORIZONTAL TILES (Goal 6, 9) */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px', flexWrap: 'nowrap', overflowX: 'auto' }}>
+              {selectedTiles.map((tile, idx) => (
+                <div key={idx} style={{ flex: '0 0 auto' }}>
+                  <div style={{ display: 'flex', gap: '4px', border: '1.5px solid gold', padding: '8px', borderRadius: '12px', background: 'rgba(0,0,0,0.8)' }}>
+                    <img src={getLetterUrl(tile[0])} style={{ width: '60px' }} />
+                    <img src={getLetterUrl(tile[tile.length-1])} style={{ width: '60px' }} />
+                  </div>
+                  <p style={{ color: 'gold', fontSize: '0.7rem', marginTop: '10px', fontWeight: 'bold' }}>{tile.toUpperCase()}</p>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: 'rgba(30,0,0,0.9)', padding: '40px', borderRadius: '30px', border: '1px solid gold' }}>
+              <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
+              <p style={{ color: 'gold', marginTop: '20px' }}>— {from.toUpperCase()}</p>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
 }
-
-export default function OpenPage() {
-  return (
-    <Suspense fallback={<div style={{color: 'gold', background: '#000', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>UNFOLDING...</div>}>
-      <HarmonicaContent />
-    </Suspense>
-  );
-}
+export default function OpenPage() { return <Suspense><OpenContent /></Suspense>; }
