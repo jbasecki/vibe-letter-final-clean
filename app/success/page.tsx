@@ -29,7 +29,7 @@ function SenderContent() {
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
-      {/* HARMONICA PREVIEW (The high-end top line) */}
+      {/* HARMONICA PREVIEW */}
       <div style={{ width: '100%', maxWidth: '900px', textAlign: 'center', marginBottom: '50px' }}>
         <p style={{ color: 'gold', fontSize: '0.7rem', letterSpacing: '4px', marginBottom: '30px', opacity: 0.6 }}>HARMONICA PREVIEW</p>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', minHeight: '120px', flexWrap: 'nowrap', overflowX: 'auto' }}>
@@ -47,7 +47,11 @@ function SenderContent() {
 
       <div style={{ width: '100%', maxWidth: '650px', background: 'rgba(30,0,0,0.4)', padding: '35px', borderRadius: '35px', border: '1px solid gold', position: 'relative' }}>
         
-        {/* SUBTLE INTERACTIVE TOKENS */}
+        {/* NEW PROFESSIONAL LABEL (Replaces "Your clickables") */}
+        <p style={{ color: 'white', fontSize: '0.85rem', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '1px' }}>
+          Select words to stash:
+        </p>
+        
         <div style={{ marginBottom: '25px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {message.split(/\s+/).map((word, i) => {
             const clean = word.replace(/[.,!?;:]/g, "");
@@ -70,16 +74,16 @@ function SenderContent() {
           style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }}
         />
 
-        {/* THE SUBTLE GRAY REMINDER: Only shows if text exists but nothing is stashed */}
+        {/* SUBTLE GRAY REMINDER */}
         {message.length > 5 && stashedWords.length === 0 && (
           <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '90px', left: '35px', fontStyle: 'italic', animation: 'fadeIn 2s' }}>
-            Tip: Tap your words above to stash them into the golden reveal...
+            Touch your words above to stash them into the Golden Harmonica...
           </p>
         )}
 
         {/* HOVER INFO ICON */}
         <div 
-          title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text."
+          title="Meditative meaning is formed here through visual abstracts, transcending the symbols of traditional text."
           style={{ position: 'absolute', bottom: '75px', right: '25px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '1px 5px', fontSize: '0.65rem', cursor: 'help' }}
         >
           [i]
