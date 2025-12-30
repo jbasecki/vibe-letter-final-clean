@@ -2,15 +2,24 @@
 import React, { useState } from 'react';
 
 const vibes = [
-  { id: '14', name: 'Rainforest Sanctuary' }, { id: '19', name: 'The Golden Clearing' },
-  { id: '11', name: 'Winter Night' }, { id: '13', name: 'Enchanted Gold' },
-  { id: '15', name: 'Crimson Glow' }, { id: '01', name: 'Midnight Stash' },
-  { id: '02', name: 'Ethereal Dawn' }, { id: '03', name: 'Golden Cognition' },
-  { id: '04', name: 'Velvet Silence' }, { id: '05', name: 'Amber Echo' },
-  { id: '06', name: 'Stardust Archive' }, { id: '07', name: 'Celestial Harmony' },
-  { id: '08', name: 'Lunar Drift' }, { id: '09', name: 'Solar Bloom' },
-  { id: '10', name: 'Misty Peak' }, { id: '12', name: 'Oceanic Breath' },
-  { id: '16', name: 'Twilight Ember' }, { id: '17', name: 'Serene Moss' },
+  { id: '14', name: 'Rainforest Sanctuary' },
+  { id: '19', name: 'The Golden Clearing' },
+  { id: '10', name: 'Misty Peak' },
+  { id: '09', name: 'Solar Bloom' },
+  { id: '01', name: 'Midnight Stash' },
+  { id: '02', name: 'Ethereal Dawn' },
+  { id: '03', name: 'Golden Cognition' },
+  { id: '04', name: 'Velvet Silence' },
+  { id: '05', name: 'Amber Echo' },
+  { id: '06', name: 'Stardust Archive' },
+  { id: '07', name: 'Celestial Harmony' },
+  { id: '08', name: 'Lunar Drift' },
+  { id: '11', name: 'Winter Night' },
+  { id: '12', name: 'Oceanic Breath' },
+  { id: '13', name: 'Enchanted Gold' },
+  { id: '15', name: 'Crimson Glow' },
+  { id: '16', name: 'Twilight Ember' },
+  { id: '17', name: 'Serene Moss' },
   { id: '18', name: 'Radiant Stillness' }
 ];
 
