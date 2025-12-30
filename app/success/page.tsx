@@ -94,7 +94,20 @@ function SuccessContent() {
     </main>
   );
 }
-
+// Add this inside your return() block, next to the SHARE button
+<button 
+  onClick={() => window.location.href = 'https://harmonica.design'}
+  style={{ 
+    background: 'rgba(255,215,0,0.2)', 
+    color: 'gold', 
+    border: '1px solid gold', 
+    padding: '12px 24px', 
+    borderRadius: '30px', 
+    cursor: 'pointer' 
+  }}
+>
+  REPLY WITH A METAPHOR
+</button>
 export default function SuccessPage() {
   return (
     <Suspense fallback={<div style={{ color: 'gold', background: 'black', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
