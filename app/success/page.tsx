@@ -1,13 +1,14 @@
 'use client';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function SuccessPage() {
+// 1. This sub-component handles the data and the UI
+function SuccessContent() {
   const searchParams = useSearchParams();
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isMuted, setIsMuted] = useState(true);
 
-  // Pulling the words from your earlier successful test
+  // Retrieve your "HAPPY SUNNY MONDAY" data
   const word1 = searchParams.get('word1') || 'HAPPY';
   const word2 = searchParams.get('word2') || 'SUNNY';
   const word3 = searchParams.get('word3') || 'MONDAY';
@@ -19,14 +20,14 @@ export default function SuccessPage() {
       audioRef.current.muted = newMuteState;
       setIsMuted(newMuteState);
       if (!newMuteState) {
-        audioRef.current.play().catch(err => console.error("Audio play failed:", err));
+        audioRef.current.play().catch(err => console.error("Audio failed:", err));
       }
     }
   };
 
   return (
     <main style={{ position: 'relative', minHeight: '100vh', background: '#000', overflow: 'hidden' }}>
-      {/* 1. Corrected Video Source Logic */}
+      {/* Visual Sanctuary: Rainforest (ID 14) */}
       <video
         autoPlay
         muted
@@ -37,10 +38,10 @@ export default function SuccessPage() {
         <source src="https://storage.googleapis.com/simple-bucket-27/14.mp4" type="video/mp4" />
       </video>
 
-      {/* 2. Hidden Audio Element */}
+      {/* Audio Layer */}
       <audio ref={audioRef} loop muted src="https://storage.googleapis.com/simple-bucket-27/audio/ambient.mp3" />
 
-      {/* 3. Re-centered Metaphor Overlay */}
+      {/* Metaphor Overlay */}
       <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingTop: '10vh', color: 'gold' }}>
         <p style={{ letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
           A HARMONICA COMPOSED OF MEANINGFUL WORDS
@@ -58,7 +59,7 @@ export default function SuccessPage() {
         </div>
       </div>
 
-      {/* 4. Unmute Toggle */}
+      {/* Control: Fixed Bottom Right */}
       <button 
         onClick={handleToggleMute}
         style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}
@@ -66,5 +67,14 @@ export default function SuccessPage() {
         {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
       </button>
     </main>
+  );
+}
+
+// 2. The Main Export MUST wrap the content in Suspense to fix the Vercel error
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div style={{ background: '#000', color: 'gold', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }
