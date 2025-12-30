@@ -63,7 +63,6 @@ function SuccessContent() {
         <h1 className={greatVibes.className} style={{ color: 'gold', fontSize: '5rem', marginTop: 0 }}>{signature}</h1>
       </div>
 
-      {/* FIXED BUTTON LAYOUT - ALL THREE BUTTONS INSIDE THE MAIN DIV */}
       <div style={{ position: 'fixed', bottom: '30px', left: '30px', display: 'flex', gap: '15px', zIndex: 10 }}>
         <button onClick={handleToggleMute} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
           {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
@@ -72,7 +71,7 @@ function SuccessContent() {
           SHARE
         </button>
         <button onClick={() => window.location.href = 'https://harmonica.design'} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
-          REPLY WITH A METAPHOR
+          FREE REPLY
         </button>
       </div>
     </main>
