@@ -81,7 +81,20 @@ function SuccessContent() {
           {signature}
         </h1>
       </div>
-
+<div style={{ position: 'fixed', bottom: '30px', left: '30px', display: 'flex', gap: '15px', zIndex: 10 }}>
+        <button onClick={handleToggleMute} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
+          {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
+        </button>
+        <button onClick={handleShare} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
+          SHARE
+        </button>
+        <button 
+          onClick={() => window.location.href = 'https://harmonica.design'}
+          style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}
+        >
+          REPLY WITH A METAPHOR
+        </button>
+      </div>
       {/* Controls */}
       <div style={{ position: 'fixed', bottom: '30px', left: '30px', display: 'flex', gap: '15px', zIndex: 10 }}>
         <button onClick={handleToggleMute} style={{ background: 'rgba(255,215,0,0.2)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}>
@@ -105,13 +118,3 @@ function SuccessContent() {
     borderRadius: '30px', 
     cursor: 'pointer' 
   }}
->
-  REPLY WITH A METAPHOR
-</button>
-export default function SuccessPage() {
-  return (
-    <Suspense fallback={<div style={{ color: 'gold', background: 'black', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
-      <SuccessContent />
-    </Suspense>
-  );
-}
