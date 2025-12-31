@@ -8,9 +8,11 @@ function OpenContent() {
   const [isMuted, setIsMuted] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // IMMEDIATELY LOCKING THE VIBE
+  // THE PERSISTENCE LOCK: No safety default here, force the URL choice
+  const vibeParam = searchParams.get('vibe'); 
+  const sceneId = vibeParam ? vibeParam : '14'; 
+  
   const message = searchParams.get('msg') || "";
-  const sceneId = searchParams.get('vibe') || '14'; 
   const tilesStr = searchParams.get('tiles') || "";
   const from = searchParams.get('from') || 'A Friend';
   const selectedTiles = tilesStr ? tilesStr.split(',').filter(t => t.trim()) : [];
@@ -28,21 +30,14 @@ function OpenContent() {
   return (
     <main style={{ height: '100vh', width: '100vw', background: '#000', position: 'relative', overflow: 'hidden' }}>
       
-      {/* THE PERSISTENCE KEY: This forces the leaf to disappear if sceneId is not 14 */}
+      {/* THE KEY: Forces a total refresh to whatever 'sceneId' is */}
       <video 
         key={sceneId} 
         autoPlay 
         loop 
         muted 
         playsInline 
-        style={{ 
-          position: 'absolute', 
-          width: '100%', 
-          height: '100%', 
-          objectFit: 'cover', 
-          opacity: unfolded ? 0.6 : 0.4,
-          transition: 'opacity 2s ease-in-out'
-        }}
+        style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: unfolded ? 0.6 : 0.4 }}
       >
         <source src={`https://storage.googleapis.com/simple-bucket-27/${sceneId}.mp4`} type="video/mp4" />
       </video>
@@ -62,10 +57,9 @@ function OpenContent() {
         ) : (
           <div style={{ width: '95%', textAlign: 'center', position: 'relative' }}>
             <h2 style={{ color: 'gold', letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
-              A HARMONICA COMPOSED OF MEANINGFUL WORDS
+                A HARMONICA COMPOSED OF MEANINGFUL WORDS
             </h2>
             
-            {/* TILES AND MESSAGE UI */}
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '60px', overflowX: 'auto' }}>
               {selectedTiles.map((tile, idx) => (
                 <div key={idx} style={{ flex: '0 0 auto' }}>
@@ -82,6 +76,13 @@ function OpenContent() {
               <p style={{ color: 'white', fontSize: '1.4rem' }}>{message}</p>
               <p style={{ color: 'gold', marginTop: '25px', fontWeight: 'bold' }}>— {from.toUpperCase()}</p>
             </div>
+            
+            <button 
+              onClick={() => window.location.href = '/'}
+              style={{ marginTop: '50px', background: 'transparent', border: '1px solid gold', color: 'gold', padding: '15px 40px', borderRadius: '30px', cursor: 'pointer', fontWeight: 'bold', letterSpacing: '2px' }}
+            >
+              REPLY
+            </button>
           </div>
         )}
       </div>
