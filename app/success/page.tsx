@@ -1,66 +1,80 @@
 'use client';
-import React, { useState, Suspense } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-function SenderContent() {
+// 1. This sub-component handles the data and the UI
+function SuccessContent() {
   const searchParams = useSearchParams();
-  const vibeId = searchParams.get('vibe') || '14'; 
-  const [message, setMessage] = useState("");
-  const [stashedWords, setStashedWords] = useState<string[]>([]);
-  const [name, setName] = useState("");
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isMuted, setIsMuted] = useState(true);
 
-  const getLetterUrl = (l: string) => `https://storage.googleapis.com/simple-bucket-27/${l.toUpperCase()}5.png`;
+  // Retrieve your "HAPPY SUNNY MONDAY" data
+  const word1 = searchParams.get('word1') || 'HAPPY';
+  const word2 = searchParams.get('word2') || 'SUNNY';
+  const word3 = searchParams.get('word3') || 'MONDAY';
+  const signature = searchParams.get('signature') || 'Mom';
 
-  const toggleWord = (word: string) => {
-    const clean = word.trim().replace(/[.,!?;:]/g, "");
-    if (!clean) return;
-    setStashedWords(prev => 
-      prev.includes(clean) ? prev.filter(w => w !== clean) : [...prev, clean]
-    );
-  };
-
-  const handleStashAndCopy = () => {
-    const baseUrl = window.location.origin;
-    const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
-    navigator.clipboard.writeText(link);
-    window.open(link, '_blank');
+  const handleToggleMute = () => {
+    if (audioRef.current) {
+      const newMuteState = !audioRef.current.muted;
+      audioRef.current.muted = newMuteState;
+      setIsMuted(newMuteState);
+      if (!newMuteState) {
+        audioRef.current.play().catch(err => console.error("Audio failed:", err));
+      }
+    }
   };
 
   return (
-    <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
-      <div style={{ display: 'flex', gap: '15px', marginBottom: '50px', justifyContent: 'center', flexWrap: 'wrap' }}>
-        {stashedWords.map((word, i) => (
-          <div key={i} style={{ display: 'flex', gap: '5px', border: '1.5px solid gold', padding: '10px', borderRadius: '12px' }}>
-            <img src={getLetterUrl(word[0])} style={{ width: '50px' }} alt="tile" />
-            <img src={getLetterUrl(word[word.length-1])} style={{ width: '50px' }} alt="tile" />
-          </div>
-        ))}
+    <main style={{ position: 'relative', minHeight: '100vh', background: '#000', overflow: 'hidden' }}>
+      {/* Visual Sanctuary: Rainforest (ID 14) */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ position: 'fixed', width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
+      >
+        <source src="https://storage.googleapis.com/simple-bucket-27/14.mp4" type="video/mp4" />
+      </video>
+
+      {/* Audio Layer */}
+      <audio ref={audioRef} loop muted src="https://storage.googleapis.com/simple-bucket-27/audio/ambient.mp3" />
+
+      {/* Metaphor Overlay */}
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingTop: '10vh', color: 'gold' }}>
+        <p style={{ letterSpacing: '4px', fontSize: '0.8rem', marginBottom: '40px' }}>
+          A HARMONICA COMPOSED OF MEANINGFUL WORDS
+        </p>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '30px', fontSize: '2rem', fontWeight: 'bold' }}>
+          <span>{word1}</span>
+          <span>{word2}</span>
+          <span>{word3}</span>
+        </div>
+
+        <div style={{ marginTop: '60px' }}>
+          <p style={{ fontStyle: 'italic', marginBottom: '10px' }}>signed,</p>
+          <h1 style={{ fontSize: '3.5rem' }}>{signature}</h1>
+        </div>
       </div>
-      <div style={{ width: '100%', maxWidth: '550px', textAlign: 'center' }}>
-        <textarea 
-          placeholder="ENTER MESSAGE" 
-          value={message} 
-          onChange={(e) => setMessage(e.target.value)}
-          onBlur={(e) => e.target.value.split(" ").forEach(toggleWord)}
-          style={{ background: 'transparent', color: 'white', border: '1px solid #222', width: '100%', height: '180px', padding: '25px', borderRadius: '20px', fontSize: '1.3rem' }}
-        />
-        <input 
-          placeholder="SIGNATURE" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          style={{ background: 'transparent', color: 'gold', border: 'none', borderBottom: '1px solid #222', width: '80%', marginTop: '30px', textAlign: 'center', letterSpacing: '4px' }}
-        />
-        <button 
-          onClick={handleStashAndCopy}
-          style={{ marginTop: '70px', background: '#fbbf24', color: 'black', padding: '22px 50px', borderRadius: '50px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%' }}
-        >
-          PRODUCE & OPEN HARMONICA
-        </button>
-      </div>
+
+      {/* Control: Fixed Bottom Right */}
+      <button 
+        onClick={handleToggleMute}
+        style={{ position: 'fixed', bottom: '30px', right: '30px', zIndex: 10, background: 'rgba(0,0,0,0.6)', color: 'gold', border: '1px solid gold', padding: '12px 24px', borderRadius: '30px', cursor: 'pointer' }}
+      >
+        {isMuted ? 'UNMUTE SANCTUARY' : 'MUTE SANCTUARY'}
+      </button>
     </main>
   );
 }
 
+// 2. The Main Export MUST wrap the content in Suspense to fix the Vercel error
 export default function SuccessPage() {
-  return <Suspense fallback={<div style={{background:'#000', height:'100vh'}}></div>}><SenderContent /></Suspense>;
+  return (
+    <Suspense fallback={<div style={{ background: '#000', color: 'gold', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Loading Sanctuary...</div>}>
+      <SuccessContent />
+    </Suspense>
+  );
 }
