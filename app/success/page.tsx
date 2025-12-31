@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 
 function SenderContent() {
   const searchParams = useSearchParams();
-  // THE PERSISTENCE START: Grabbing the choice from the URL
   const vibeId = searchParams.get('vibe') || '14'; 
   
   const [message, setMessage] = useState("");
@@ -23,56 +22,45 @@ function SenderContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    // THE PERSISTENCE BRIDGE: Ensuring the vibeId is attached to the copied link
+    // THE PERSISTENCE BRIDGE
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
     
     navigator.clipboard.writeText(link);
-    alert("Harmonica Link Copied to Clipboard!");
     window.open(link, '_blank');
   };
 
   return (
     <main style={{ minHeight: '100vh', background: '#000', color: 'white', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
-      <h2 style={{ color: 'gold', letterSpacing: '4px', marginBottom: '30px' }}>THE SUCCESS DESK</h2>
       
-      {/* BACKGROUND PREVIEW: Shows the user what video is persisting */}
-      <div style={{ width: '100%', maxWidth: '600px', marginBottom: '40px' }}>
-        <video key={vibeId} autoPlay loop muted playsInline style={{ width: '100%', borderRadius: '15px', border: '1px solid #333' }}>
-          <source src={`https://storage.googleapis.com/simple-bucket-27/${vibeId}.mp4`} type="video/mp4" />
-        </video>
+      {/* ALPHABET TILES */}
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '40px', overflowX: 'auto', width: '100%', justifyContent: 'center', padding: '20px' }}>
+        {stashedWords.map((word, i) => (
+          <div key={i} style={{ display: 'flex', gap: '4px', border: '1px solid gold', padding: '5px', borderRadius: '8px' }}>
+            <img src={getLetterUrl(word[0])} style={{ width: '40px' }} alt="tile" />
+            <img src={getLetterUrl(word[word.length-1])} style={{ width: '40px' }} alt="tile" />
+          </div>
+        ))}
       </div>
 
-      <div style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div style={{ width: '100%', maxWidth: '500px', textAlign: 'center' }}>
         <textarea 
-          placeholder="Type your message..." 
+          placeholder="ENTER MESSAGE" 
           value={message} 
           onChange={(e) => setMessage(e.target.value)}
-          style={{ background: '#111', color: 'white', border: '1px solid gold', padding: '15px', borderRadius: '10px', height: '100px' }}
+          onBlur={(e) => e.target.value.split(" ").forEach(toggleWord)}
+          style={{ background: 'transparent', color: 'white', border: '1px solid #333', width: '100%', height: '150px', padding: '20px', borderRadius: '15px', fontSize: '1.2rem' }}
         />
         
         <input 
-          placeholder="Your Signature (From...)" 
+          placeholder="SIGNATURE" 
           value={name} 
           onChange={(e) => setName(e.target.value)}
-          style={{ background: '#111', color: 'white', border: '1px solid gold', padding: '15px', borderRadius: '10px' }}
+          style={{ background: 'transparent', color: 'gold', border: 'none', borderBottom: '1px solid #333', width: '100%', marginTop: '20px', textAlign: 'center', letterSpacing: '2px' }}
         />
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px' }}>
-          {["Harmony", "Peace", "Love", "Light"].map(word => (
-            <button 
-              key={word} 
-              onClick={() => toggleWord(word)}
-              style={{ padding: '10px 20px', borderRadius: '20px', border: '1px solid gold', background: stashedWords.includes(word) ? 'gold' : 'transparent', color: stashedWords.includes(word) ? 'black' : 'gold', cursor: 'pointer' }}
-            >
-              {word}
-            </button>
-          ))}
-        </div>
-
-        {/* THE YELLOW PRODUCE BUTTON */}
         <button 
           onClick={handleStashAndCopy}
-          style={{ marginTop: '40px', background: 'gold', color: 'black', padding: '20px', borderRadius: '40px', fontWeight: 'bold', fontSize: '1.1rem', cursor: 'pointer', border: 'none' }}
+          style={{ marginTop: '60px', background: '#fbbf24', color: 'black', padding: '20px 40px', borderRadius: '40px', fontWeight: 'bold', cursor: 'pointer', border: 'none', width: '100%' }}
         >
           PRODUCE & OPEN HARMONICA
         </button>
@@ -81,11 +69,6 @@ function SenderContent() {
   );
 }
 
-// THE SUSPENSE FIX: Essential for the Yellow Button to work on Vercel
 export default function SuccessPage() {
-  return (
-    <Suspense fallback={<div style={{color:'white'}}>Loading Desk...</div>}>
-      <SenderContent />
-    </Suspense>
-  );
+  return <Suspense fallback={<div>Loading...</div>}><SenderContent /></Suspense>;
 }
