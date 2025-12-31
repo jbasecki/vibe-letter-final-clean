@@ -21,7 +21,7 @@ function SenderContent() {
 
   const handleStashAndCopy = () => {
     const baseUrl = window.location.origin;
-    // Persistence link bridge
+    // CRITICAL: We pass &vibe=${vibeId} here to keep the background persistent
     const link = `${baseUrl}/open?vibe=${vibeId}&msg=${encodeURIComponent(message)}&tiles=${stashedWords.join(',')}&from=${encodeURIComponent(name)}`;
     navigator.clipboard.writeText(link);
     window.open(link, '_blank');
@@ -46,6 +46,7 @@ function SenderContent() {
         </div>
       </div>
 
+      {/* THE DESK CONTAINER */}
       <div style={{ width: '100%', maxWidth: '650px', background: 'rgba(30,0,0,0.4)', padding: '35px', borderRadius: '35px', border: '1px solid gold', position: 'relative' }}>
         <div style={{ marginBottom: '25px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
           {message.split(/\s+/).map((word, i) => {
@@ -58,44 +59,33 @@ function SenderContent() {
           })}
         </div>
 
-       {/* THE TEXTAREA */}
-<textarea 
-  placeholder="Compose..." 
-  value={message} 
-  onChange={(e) => setMessage(e.target.value)} 
-  style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }} 
-/>
+        <textarea placeholder="Compose..." value={message} onChange={(e) => setMessage(e.target.value)} style={{ width: '100%', height: '140px', background: 'transparent', border: 'none', color: 'white', fontSize: '1.2rem', outline: 'none', resize: 'none' }} />
 
-{/* THE TIP (Only shows if typing but no tiles yet) */}
-{message.length > 5 && stashedWords.length === 0 && (
-  <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '85px', left: '35px', fontStyle: 'italic', pointerEvents: 'none' }}>
-    Tip: Tap your words above to stash them into the golden reveal...
-  </p>
-)}
+        {/* THE TIP */}
+        {message.length > 5 && stashedWords.length === 0 && (
+          <p style={{ color: '#888', fontSize: '0.75rem', position: 'absolute', bottom: '85px', left: '35px', fontStyle: 'italic', pointerEvents: 'none' }}>
+            Tip: Tap your words above to stash them into the golden reveal...
+          </p>
+        )}
 
-{/* THE [i] INFO ICON - Restored and Positioned */}
-<div 
-  title="Words of meditative meaning are formed by association with visual abstracts rather than specific symbols seen in text." 
-  style={{ 
-    position: 'absolute', 
-    bottom: '75px', 
-    right: '25px', 
-    color: '#888', 
-    border: '1px solid #555', 
-    borderRadius: '4px', 
-    padding: '0px 5px', 
-    fontSize: '0.65rem', 
-    cursor: 'help',
-    zIndex: 20 
-  }}
->
-  i
-</div>
+        {/* THE [i] INFO ICON RESTORED */}
+        <div 
+          title="Words of meditative meaning are formed by association with visual abstracts..." 
+          style={{ position: 'absolute', bottom: '75px', right: '25px', color: '#888', border: '1px solid #555', borderRadius: '4px', padding: '0px 5px', fontSize: '0.65rem', cursor: 'help', zIndex: 20 }}
+        >
+          i
+        </div>
 
-{/* THE SIGNATURE LINE */}
-<input 
-  placeholder="Signature" 
-  value={name} 
-  onChange={(e) => setName(e.target.value)} 
-  style={{ width: '100%', background: 'transparent', borderTop: '1px solid #333', padding: '15px 0', color: 'gold', textAlign: 'center', outline: 'none' }} 
-/>
+        <input placeholder="Signature" value={name} onChange={(e) => setName(e.target.value)} style={{ width: '100%', background: 'transparent', borderTop: '1px solid #333', padding: '15px 0', color: 'gold', textAlign: 'center', outline: 'none' }} />
+      </div>
+
+      <button onClick={handleStashAndCopy} style={{ marginTop: '50px', background: 'gold', color: 'black', padding: '18px 60px', borderRadius: '45px', fontWeight: 'bold', border: 'none', cursor: 'pointer' }}>
+        PRODUCE & OPEN HARMONICA
+      </button>
+    </main>
+  );
+}
+
+export default function SuccessPage() {
+  return <Suspense fallback={<div>Preparing...</div>}><SenderContent /></Suspense>;
+}
