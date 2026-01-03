@@ -1,6 +1,11 @@
 'use client';
 import React, { useState } from 'react';
 
+/**
+ * DEPLOYMENT TRIGGER: Jan 3, 2026
+ * This comment ensures Vercel recognizes a new build to restore the connection.
+ */
+
 // VERIFIED IDs: MATCHING YOUR GOOGLE BUCKET FILENAMES (e.g., 1.mp4, 9.mp4)
 const vibes = [
   { id: '14', name: 'Rainforest Sanctuary' },
